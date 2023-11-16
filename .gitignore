@@ -21,27 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-<button onClick={getMoreBooks}>More</button>
-
-if query:
-            regex_pattern = re.compile(query, re.IGNORECASE)
-            if categories and not levels:
-                pass
-            elif not categories and levels:
-                pass
-            elif categories and levels:
-                pdf_files = fs.find({'$and': [{"category": {"$in": categories}}, {"level": {"$in": levels}}, {"$or": [{"filename": {"$regex": regex_pattern}}, {"category": {"$regex": regex_pattern}}]}]}).skip(number_books).limit(10)
-        else:
-            if categories and levels:
-                categories = categories.split(',')
-                levels = levels.split(',')
-                print(levels)
-                print(categories)
-                pdf_files = fs.find({'$and': [{"category": {"$in": categories}}, {"level": {"$in": levels}}]}).skip(number_books).limit(10)
-            elif categories and not levels:
-                categories = categories.split(',')
-                pdf_files = fs.find({"category": {"$in": categories}}).skip(number_books).limit(10)
-            elif not categories and levels:
-                levels = levels.split(',')
-                pdf_files = fs.find({"level": {"$in": levels}}).skip(number_books).limit(10)
