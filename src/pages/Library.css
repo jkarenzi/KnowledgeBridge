@@ -1,0 +1,640 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.library_body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#search-input {
+    width: 25rem;
+    border: none;
+    border-radius: 8px;
+    padding-left: 1rem;
+    outline: none;
+}
+
+#search_submit {
+    background-color: #126f9a;
+    color: white;
+    border: none;
+    width: 5rem;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#search-form {
+    display: flex;
+    border: 1px solid lightgray;
+    height: 3rem;
+    width: 30rem;
+    border-radius: 8px;
+}
+
+.search_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search_div h3 {
+    font-size: xx-large;
+    font-weight: 600;
+}
+
+.big-book_container {
+    display: flex;
+    width: 100%;
+    min-height: 20rem;
+    background-color: #f2f2f2;
+    margin-top: 2rem;
+    z-index: 1;
+}
+
+.book_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.category_container{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    background-color: #ffffff;
+    border-top: 1px solid lightgray;
+}
+
+.category_section {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    background-color: #ffffff;
+    border-radius: 6px;
+    width: 15rem;
+    margin-left: 2rem;
+}
+
+.category_container h3{
+    font-weight: 600;
+    text-align: left;
+    margin-left: 3rem;
+}
+
+#exception {
+    text-align: left;
+    margin-left: 1rem;
+}
+
+
+
+.mini_category {
+    display: flex;
+    gap: 1rem;
+    height: 1rem;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.mini_big {
+    display: flex;
+    flex-direction: column;
+    height: 10rem;
+    overflow-y: scroll;
+}
+
+.mini_big_1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.mini_category h4 {
+    font-weight: 400;
+}
+
+.level_container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    background-color: #ffffff;
+    border-radius: 6px;
+    width: 15rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+
+.level_head {
+    background-color: #f2f2f2;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.book_and_sort {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin-left: 2rem;
+}
+
+.config {
+    height: 4rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 0.2rem;
+}
+
+.sortby {
+    display: flex;
+    gap: 1rem;
+    height: 3rem;
+    align-items: center;
+    width: 16rem;
+    margin-left: 2rem;
+}
+
+.sortby h3 {
+    font-weight: 500;
+}
+
+#sortby {
+    width: 10rem;
+    height: 2.5rem;
+    font-size: medium;
+    border-radius: 6px;
+}
+
+.length_pdf {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 3rem;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+  
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: #333;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+  
+.dot1 {
+animation-delay: -0.32s;
+}
+
+.dot2 {
+animation-delay: -0.16s;
+}
+
+.dot3 {
+animation-delay: 0s;
+}
+
+/*for user mgt system*/
+.user_mgt_intro{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    z-index: 1;
+}
+
+.user_mgt_intro h3{
+    align-self: center;
+    font-size: xx-large;
+    font-weight: 500;
+}
+
+.user_mgt_intro h4{
+    font-size: x-large;
+    font-weight: 400;
+}
+
+.search_mgt_div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 2.7rem;
+    z-index:1;
+}
+
+.search_mgt_div button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 12rem;
+    height: 2.5rem;
+    background-color: white;
+    color: black;
+    box-shadow: 2px 3px 5px lightgray;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    margin-left: 2rem;
+    font-size: medium;
+}
+
+.search_mgt_div span {
+    font-size: x-large;
+    margin-top: 0.1rem;
+}
+
+#search-mgt-form{
+    border: 1px solid lightgray;
+    box-shadow: 2px 2px 3px lightgray;
+    border-radius: 25px;
+    width: 20rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.7rem;
+    gap: 0.5rem;
+}
+
+#search-mgt-input{
+    width: 18rem;
+    height: 2.5rem;
+    outline: none;
+    border: none;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    font-size: medium;
+}
+
+.add_user_form {
+    border: 1px solid lightgray;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 2rem;
+    border-radius: 20px;
+    width: 20rem;
+    background-color: white;
+}
+
+#add_user_form {
+    width: 20rem;
+    height: 26rem;
+}
+
+.roles_and_permissions {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+}
+
+#roles_and_permissions {
+    height: 2rem;
+    width: 8rem;
+    border-radius: 8px;
+    border: 2px solid lightgray;
+}
+
+.close_overlay {
+    display: flex;
+    justify-content: space-between;
+    height: 2rem;
+    align-items: center;
+}
+
+.close_overlay h4{
+    font-weight: 400;
+    font-size: x-large;
+}
+
+.overlay_div_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.upload_usr_profile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.upload_input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete_overlay_big{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.delete_overlay {
+    display: flex;
+    width: 30rem;
+    min-height: 12.5rem;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+.delete_and_cancel {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-right: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.delete_user_ask {
+    display: flex;
+    width: 93.5%;
+    height: 4rem;
+    padding-left:  2rem;
+    align-items: center;
+    border-bottom: 1px solid grey;
+}
+
+.delete_overlay h4 {
+    font-size: large;
+    font-weight: 500;
+}
+
+#this_will{
+    text-align: left;
+    padding-left: 2rem;
+    font-weight: 300;
+}
+
+#name_delete {
+    font-weight: 600;
+}
+
+.delete_and_cancel button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 2.5rem;
+    font-size: small;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background: #f2f2f2;
+    cursor: pointer;
+}
+
+.delete_and_cancel button:hover {
+    background:#b4b4b4;
+}
+
+.delete_and_cancel button:nth-of-type(2):hover {
+    background:rgb(128, 0, 0);
+}
+
+.delete_and_cancel button:nth-of-type(2) {
+    background-color: rgb(182, 0, 0);
+    color: white;
+    border: none;
+}
+
+.profile_overlay_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.profile_overlay {
+    width: 25rem;
+    height: 25rem;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+}
+
+.profile_image_l{
+    width: 18rem;
+    height: 18rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile_image_l img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile_overlay_cancel {
+    display: flex;
+    width: 95%;
+    height: 4rem;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.profile_overlay_cancel img {
+    cursor: pointer;
+}
+
+.change_profile_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.change_profile_overlay {
+    width: 23rem;
+    height: 25rem;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+}
+
+.change_profile_overlay img:first-of-type {
+    align-self: flex-end;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+.change_profile_overlay form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    height: 90%;
+    width: 90%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.change_profile_overlay button {
+    justify-self: flex-end;
+    border: none;
+    border-radius: 20px;
+    align-self: center;
+    background-color: #0b7bd0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 2.5rem;
+}
+
+.upload_change_35 {
+    width: 100%;
+}
+
+.upload_change_35 input {
+    width: 85%;
+    margin-right: 1rem;
+}
+
+.change_pic_label {
+    font-size: large;
+}
+
+.mail_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.mail_user{
+    width: 23rem;
+    height: 25rem;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    align-items: flex-start;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+}
+
+.mail_user img {
+    cursor: pointer;
+}
+
+.mail_user_1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 95%;
+    gap: 1rem;
+    font-size: large;
+    padding-left: 1.5rem;
+}
+
+.mail_subject {
+    display: flex;
+    gap: 0.5rem;
+    align-self: flex-start;
+    margin-left: 1.3rem;
+}
+
+.mail_subject input {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #FF8400;
+    width: 15.7rem;
+}
+
+#mail_text{
+    resize: none;
+    height: 10rem;
+    width: 20rem;
+    border: 1.5px solid #FF8400;
+    outline: none;
+}
+
+.mail_user form {
+    margin-top: 1rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.mail_user button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #0b7bd0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 6rem;
+    height: 2rem;
+    font-size: large;
+}
+
+.mail_body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+

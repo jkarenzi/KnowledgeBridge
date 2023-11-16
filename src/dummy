@@ -1,0 +1,298 @@
+import { useState } from 'react';
+import { useEffect } from 'react';
+import Books from '../components/Books';
+import './Library.css';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
+const Library = () => {
+    const [ pdfBooks, setPdfBooks ] = useState([]);
+    const [ query, setQuery ] = useState('')
+    const [searchResults, setSearchResults ] = useState([])
+    const [categories, setCategories ] = useState([])
+    const [ levels, setLevels ] = useState([])
+    const [ categoryResults, setCategoryResults ] = useState([])
+    const [showLoader, setShowLoader ] = useState(false)
+    const [ message, setMessage ] = useState('')
+
+     // Define a CSS loader for the Three Dots animation
+    const ThreeDotsLoader = () => (
+        <div className="loader">
+        <div className="dot dot1"></div>
+        <div className="dot dot2"></div>
+        <div className="dot dot3"></div>
+        </div>
+    );
+
+
+    const handleSearchCheck = () => {
+        if (categories.length !== 0 && levels.length !== 0) {
+            const x = pdfBooks.filter(pdfBook => categories.includes(pdfBook.category) && levels.includes(pdfBook.level))
+            setCategoryResults(x)
+            setSearchResults(x)
+            if (x.length === 0){
+                setMessage('No matches found')
+            }
+        } else if (categories.length === 0 && levels.length === 0) {
+            setCategoryResults(pdfBooks)
+            setSearchResults(pdfBooks)
+        } else if (categories.length === 0 && levels.length !== 0) {
+            const x = pdfBooks.filter(pdfBook => levels.includes(pdfBook.level))
+            setCategoryResults(x)
+            setSearchResults(x)
+            if (x.length === 0){
+                setMessage('No matches found')
+            }
+
+        } else {
+            const x = pdfBooks.filter(pdfBook => categories.includes(pdfBook.category))
+            setCategoryResults(x)
+            setSearchResults(x)
+            if (x.length === 0){
+                setMessage('No matches found')
+            }
+        }
+    }
+
+    const handleCheck = (e) => {
+        if (e.target.checked) {
+            if (categories.length === 0) {
+                setCategories([e.target.value]);
+                
+            } else {
+                setCategories([...categories, e.target.value]);
+            }       
+        } else {
+            setCategories(categories.filter(category => category !== e.target.value)); 
+        }
+    }
+    
+
+    const handleLevels = (e) => {
+        if (e.target.checked) {
+            if (levels.length === 0) {
+                setLevels([e.target.value]);
+            } else {
+                setLevels([...levels, e.target.value]);
+            }    
+        } else {
+            setLevels(levels.filter(level => level !== e.target.value));
+        }
+    }
+    
+
+
+    useEffect(() => {
+        // Fetch the list of PDF books from Flask backend
+        fetch(`http://localhost:5000/get_books?books=${pdfBooks.length}`,{
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            setPdfBooks(data.pdf_books);
+            setSearchResults(data.pdf_books)
+            setCategoryResults(data.pdf_books)
+        })
+        .catch((error) => {
+            console.error('Error fetching PDF books', error);
+        }); 
+    }, []);
+
+    useEffect(() => {
+        handleSearchCheck()
+    }, [categories, levels])
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+        if (!query) {
+            setSearchResults(categoryResults)
+        } else {
+            const queryResults = categoryResults.filter((categoryResult) => categoryResult.filename.toLowerCase().includes(query) || categoryResult.category.toLowerCase().includes(query))
+            if (queryResults.length === 0) {
+                setMessage('No matches found')
+            } 
+            setSearchResults(queryResults)
+        }
+    }
+
+
+    const getMoreBooks = () => {
+        setShowLoader(true)
+        setTimeout(() => {
+            fetch(`http://localhost:5000/get_books?books=${searchResults.length}&query=${query}&&categories=${categories}&&levels=${levels}`,{
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setPdfBooks([...pdfBooks, ...data.pdf_books])
+                setCategoryResults([...pdfBooks, ...data.pdf_books])
+                setSearchResults([...searchResults, ...data.pdf_books])
+                setShowLoader(false)
+            })
+            .catch((error) => {
+                console.error('Error fetching PDF books', error);
+            });  
+               
+        }, 2000); 
+    }
+
+    return (
+        <body className='library_body'>
+            <div className='search_div'>
+                <h3>Explore Knowledgebridge Library</h3>
+                <form id="search-form" onSubmit={handleSearch}>
+                    <input type="text" id="search-input" placeholder="Search Knowledgebridge Library" onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
+                    <button type="submit" id='search_submit'>Search</button>
+                </form>
+            </div>
+            <div className='big-book_container'>
+                <div className='category_container'>
+                    <h3 id='exception'>Filters</h3>
+                    <div className='category_section'>
+                    <div className='level_head'>
+                            <h3>Category</h3>
+                        </div>
+                        <div className='mini_big'>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Computer science" required onChange={handleCheck}/>
+                                <h4>Computer Science</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Childrens' books" required onChange={handleCheck}/>
+                                <h4>Childrens' books</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Physics"required onChange={handleCheck}/>
+                                <h4>Physics</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Chemistry" required onChange={handleCheck}/>
+                                <h4>Chemistry</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Arts" required onChange={handleCheck}/>
+                                <h4>Arts</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='level_container'>
+                        <div className='level_head'>
+                            <h3>Level</h3>
+                        </div>
+                        <div className='mini_big'>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Primary" required onChange={handleLevels}/>
+                                <h4>Primary</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="O'Level" required onChange={handleLevels}/>
+                                <h4>O'Level</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="A'Level" required onChange={handleLevels}/>
+                                <h4>A'Level</h4>
+                            </div>
+                            <div className='mini_category'>
+                                <input type='checkbox' value="Undergraduate" required onChange={handleLevels}/>
+                                <h4>Undergraduate</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                <div className='book_and_sort'>
+                    <div className='config'>
+                        <div className='length_pdf'>
+                            <h4>{searchResults.length}</h4>results
+                        </div>
+                        <div className='sortby'>
+                            <h3>Sort by</h3>
+                            <select id="sortby"  required>
+                                <option value="" selected>Relevance</option>
+                                <option value="Date">Date</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className='book_container'>
+                        <InfiniteScroll dataLength={searchResults.length} next={getMoreBooks} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>
+                            <Books bookList={searchResults} msg={message}/>
+                        </InfiniteScroll>
+                    </div>
+                </div>
+            </div>
+        </body>
+    );
+}
+ 
+export default Library;
+
+
+<Router>
+        <Switch>
+          <Route exact path = '/login'>
+            <Login />
+          </Route>
+          <Route exact path = '/signup'>
+            <Signup />
+          </Route>
+          <Route exact path = '/library'>
+            <Library />
+          </Route>
+          <Route exact path = '/admin'>
+            <Admin />
+          </Route>
+        </Switch>
+      </Router>
+
+
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+        db = client["xtracker"]
+        xtracker_users = db['xtracker_users']
+        user_record = xtracker_users.find_one({'email': email})
+        
+        if user_record:
+            query = {'email': email}
+            update = {'$set': {'confirmed': True}}
+            xtracker_users.update_one(query, update)
+            the_msg = 'Email successfully verified'
+            return render_template('verified.html', msg=the_msg, code=1)
+
+
+            <textarea rows="23" cols="55" placeholder="Say something..."></textarea>
+
+
+
+            {props.usersList.map((user) => (
+                <div className='user' key={user.user_id}>
+                    <div className='user_name'>
+                        <div className='user_profile'>
+                            <img src={user.profile_url} onClick={()=> openProfileOverlay(user.profile_url)}/>
+                        </div>
+                        <div className='user_details'>
+                            <div className='user_details_1'>
+                                <h4>{user.username}</h4>
+                                {user.admin && <img src='/images/admin.png' width="15px" height="15px"/>}
+                            </div>
+                            <h4 id='email_user'>{user.email}</h4>
+                        </div>
+                    </div>
+
+
+
+                    likes = post_likes.find({'post_id':post_id},{'likes':1})
+        sum = 0
+
+        for document in likes:
+            sum += 1
+
+
+            dislikes = post_dislikes.find({'post_id':post_id},{'dislikes':1})
+        sum = 0
+
+        for document in dislikes:
+            sum += 1
+              
+
+
+ 
