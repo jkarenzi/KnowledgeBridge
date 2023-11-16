@@ -1,0 +1,145 @@
+.all_questions {
+    border:1px solid lightgray;
+    width: 40rem;
+    border-radius: 6px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+
+}
+
+.questions_intro {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid lightgray;
+    padding: 0.8rem;
+}
+
+.a_question {
+    border-bottom: 1px solid lightgray;
+    min-height: 7rem;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-evenly;
+}
+
+.a_question_category {
+    display: flex;
+    gap: 1rem;
+}
+
+.a_question:last-of-type {
+    border-bottom: none;
+}
+
+.answer_profile_99 {
+    width: 3.3rem;
+    height: 3.3rem;
+    border-radius: 50%;
+    margin-left: 1rem;
+}
+
+.answer_profile {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.answer_profile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.asked_question {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 33rem;
+}
+
+.asked_question_1 {
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    white-space: pre-wrap;
+}
+
+.asked_question_1:hover {
+    text-decoration: underline;
+}
+
+#answer_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 5rem;
+    border-radius: 6px;
+    border: 1px solid lightgray;
+    margin-left: 1rem;
+}
+
+.answer_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.answer_container {
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    width: 28rem;
+    min-height: 27rem;
+}
+
+.question_div_answer {
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.react_quill_editor_1 {
+    width: 26rem;
+    height: 10rem;
+}
+
+.answer_container form {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+#post_answer{
+    align-self: flex-end;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 6rem;
+    border-radius: 20px;
+    border: none;
+    background-color: #204fdc;
+    color: white;
+}
+
+mark {
+    background-color: #ff8b0f;
+}

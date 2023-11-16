@@ -1,0 +1,58 @@
+.community_body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f2f2f2;
+}
+
+.community_header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color: white;
+    height: 4rem;
+}
+
+.community_header_icons {
+    display: flex;
+    margin-left: 5rem;
+    align-items: center;
+    height: 100%;
+    gap: 1rem;
+}
+
+.community_div {
+    display: flex;
+    padding-top: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    height: 83%;
+    width: 3rem;
+}
+
+.community_search_bar {
+    display: flex;
+    border: 1px solid black;
+    border-radius: 6px;
+    height: 2.5rem;
+    width: 20rem;
+    margin-right: 2rem;
+    position: absolute;
+    top: 6.7rem;
+    right: 0;
+}
+
+.community_search_bar form {
+    padding-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.community_search_bar input {
+    border: none;
+    width: 17rem;
+    height: 2.4rem;
+    outline: none;
+}

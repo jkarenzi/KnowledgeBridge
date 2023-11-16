@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Inconsolata:wght@300;400&display=swap');
+
+.settings_body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.big_profile_picture {
+    width: 10rem;
+    position: relative;
+}
+
+.settings_intro {
+    padding: 1rem;
+    border-bottom: 4px solid #FF8400 ;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    width: 95%;
+    display: flex;
+    justify-content: flex-start;
+    font-size: large;
+}
+
+.inner_profile_picture {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.inner_profile_picture_1 {
+    width: 10.3rem;
+    height: 10.3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #FF8400;
+}
+
+.inner_profile_picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#edit_pic {
+    position: absolute;
+    top: 75%;
+    left: 80%;
+}
+
+.big_profile_picture_details_1 {
+    border: 2px solid #FF8400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30.3rem;
+    border-radius: 10px;
+}
+
+.big_profile_picture_details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 30rem;
+    height: 10rem;
+    background: lightgray;
+    border-radius: 8px;
+}
+
+.profile_dets {
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile_dets img {
+    cursor: pointer;
+}
+
+#profile_dets_email {
+    font-family: 'Inconsolata',monospace;
+}
+
+.big_div_container_1 {
+    display: flex;
+    justify-content: center;
+}
+
+.big_div_container {
+    display: flex;
+    gap: 5rem;
+    margin-top: 3rem;
+}
+
+.change_username_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.change_password_big, .change_profile_set_big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.change_password {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid lightgray;
+    width: 23rem;
+    height: 29rem;
+    border-radius: 10px;
+    align-items: flex-start;
+}
+
+.change_username {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid lightgray;
+    width: 23rem;
+    height: 23rem;
+    border-radius: 10px;
+    align-items: flex-start;
+}
+
+.change_profile_set {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid lightgray;
+    width: 23rem;
+    height: 23rem;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.change_password img, .change_username img,.change_profile_set img {
+    cursor: pointer;
+}
+
+.change_username h4, .change_password h4,.change_profile_set h4 {
+    margin-left: 1.5rem;
+    font-weight: 500;
+    font-size: large;
+}
+
+#title_101 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    height: 3rem;
+    width: 95%;
+}
+
+#title_101 h4 {
+    margin-left: 2rem;
+}
+
+.change_username form, .change_password form {
+    width: 95%;
+    margin-top: -2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.change_username form input,.change_password form input {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #FF8400;
+    width: 20rem;
+}
+
+.one_1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    gap: 0.5rem;
+}
+
+.change_username form button, .change_password form button,.change_profile_set button {
+    display: flex;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #2691d9;
+    border-radius: 20px;
+    width: 10rem;
+    height: 2rem;
+    font-size: medium;
+    color: white;
+    align-self: center;
+    cursor: pointer;
+}
+
+.profile_actions_popup_9 {
+    position: absolute;
+    top: 75%;
+    left:80%;
+    background-color: #f2f2f2;
+    border: 1px solid lightgrey;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 8rem;
+    height: 6rem;
+    align-items: flex-start;
+    box-shadow: 2px 3px 5px lightgray;
+    z-index: 3;
+}
+
+.profile_actions_popup_9 img {
+    align-self: flex-end;
+    margin-right: 0.5rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.7rem;
+    cursor: pointer;
+}
+
+.profile_actions_popup_9 button {
+    border: none;
+    border-top: 1px solid rgb(217, 215, 215);
+    border-bottom: 1px solid rgb(217, 215, 215);
+    background-color: #f2f2f2;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 0.5rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.profile_actions_popup_9 button:hover {
+    background-color: #bebebe;
+}
+
+.profile_actions_popup_9 button:last-of-type {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.change_profile_set form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    justify-content: space-around;
+    height: 19rem;
+}
+
+.upload_change_34 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

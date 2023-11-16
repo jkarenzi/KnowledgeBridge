@@ -1,0 +1,157 @@
+.admin_body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+#cmp {
+    font-size: xx-large;
+    font-weight: 500;
+}
+
+.add-big_container {
+    display: flex;
+    padding-left: 2rem;
+}
+
+.add_container {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid lightgray;
+    width: 25rem;
+    height: 30rem;
+}
+
+.add_book {
+    font-size: x-large;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: 500;
+    background-color: #126f9a;
+    color: white;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 15rem;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.category, .upload_pdf label {
+    font-weight: 500;
+    font-size: large;
+}
+
+.upload_pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 5rem;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+#category {
+    width: 10rem;
+    height: 2.5rem;
+    font-size: medium;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+#levels{
+    width: 10rem;
+    height: 2.5rem;
+    font-size: medium;
+    border-radius: 6px;
+}
+
+#submit_pdf {
+    background-color: #126f9a;
+    color: white;
+    border-radius: 20px;
+    border: none;
+    height: 2.5rem;
+    width: 8rem;
+    font-size: large;
+    margin-top: 1rem;
+}
+
+.admin_header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color:  #f2f2f2;
+    height: 4rem;
+}
+
+.admin_header_icons {
+    display: flex;
+    margin-left: 2rem;
+    align-items: center;
+    height: 100%;
+    gap: 1rem;
+}
+
+.admin_header_icons_65 {
+    display: flex;
+    padding-top: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    height: 83%;
+    width: 3rem;
+}
+
+.category_count {
+    display: flex;
+    flex-wrap: wrap;
+    width: 30rem;
+    height: 15rem;
+    gap: 1rem;
+}
+
+.count_22 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    height: 6rem;
+    width: 8rem;
+    background: #126f9a;
+    color: white;
+}
+
+.count_22 h4 {
+    font-size: large;
+    margin: 0;
+}
+
+.content_mgt_container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.admin_desc {
+    display: flex;
+    justify-content: space-between;
+    width: 72%;
+    padding-left: 10rem;
+    padding-right: 10rem;
+}
+
+.admin_desc h3 {
+    font-size: larger;
+    font-weight: 500;
+}

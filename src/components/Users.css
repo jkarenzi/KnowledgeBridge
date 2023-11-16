@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Inconsolata:wght@300;400&display=swap');
+
+.user{
+    display: flex;
+    padding: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid lightgray;
+    box-shadow: 5px 5px 10px lightgray;
+    margin-bottom: 1rem;
+}
+
+.user_name {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    position: relative;
+}
+
+.user_profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.user_profile_99 {
+    height: 3.8rem;
+    width: 3.8rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #FF8400;
+}
+
+.user_profile img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+#error_msg {
+    font-size: x-large;
+    font-weight: 500;
+    margin-top: 6rem;
+}
+
+.options_mgt {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+    gap: 2rem;
+}
+
+.options_mgt img {
+    cursor: pointer;
+}
+
+.options_mgt img:first-of-type{
+    margin-top: 0.2rem;
+}
+
+.user_details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 3.5rem;
+}
+
+.user_details_1 h4 {
+    font-size: medium;
+    font-weight: 500;
+    margin: 0;
+}
+
+#email_user{
+    font-family: 'Inconsolata',monospace;
+    font-size: medium;
+    font-weight: 500;
+    margin: 0;
+}
+
+.user_details_1 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile_actions_popup {
+    position: absolute;
+    left: 3rem;
+    top: 2rem;
+    background-color: #f2f2f2;
+    border: 1px solid lightgrey;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 8rem;
+    height: 8rem;
+    align-items: flex-start;
+    box-shadow: 2px 3px 5px lightgray;
+    z-index: 3;
+}
+
+.profile_actions_popup img {
+    align-self: flex-end;
+    margin-right: 0.5rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.7rem;
+    cursor: pointer;
+}
+
+.profile_actions_popup button {
+    border: none;
+    border-top: 1px solid rgb(217, 215, 215);
+    border-bottom: 1px solid rgb(217, 215, 215);
+    background-color: #f2f2f2;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 0.5rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.profile_actions_popup button:hover {
+    background-color: #bebebe;
+}
+
+.profile_actions_popup button:last-of-type {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
