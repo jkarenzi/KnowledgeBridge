@@ -34,6 +34,10 @@ const ForgotPassword = () => {
                 errorToast(data.message)
             }
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
     
 
