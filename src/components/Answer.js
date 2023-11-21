@@ -115,56 +115,52 @@ const Answer = () => {
         setQuestions([])
         setMessage('')
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=0`,{
-                method: 'GET',
-                headers: {'Authorization': `Bearer ${token}`},
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.code !== 0){
-                    navigate('/login')
-                }
-                if (data.questions.length === 0) {
-                    setMessage('No matches found')
-                } else {
-                    setMessage('')
-                }
-                setQuestions(data.questions)
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                errorToast("No internet connection!")
-                console.error('Error', error);
-            });
-        }, 2000)    
+        fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=0`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`},
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.questions.length === 0) {
+                setMessage('No matches found')
+            } else {
+                setMessage('')
+            }
+            setQuestions(data.questions)
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const getMoreQuestions = () => {
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=${questions.length}`,{
-                method: 'GET',
-                headers: {'Authorization': `Bearer ${token}`},
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.code !== 0){
-                    navigate('/login')
-                }
-                if (data.status === 'ok'){
-                    setQuestions([...questions, ...data.questions])
-                    setShowLoader(false)
-                } else {
-                    errorToast(data.message)
-                }
-                console.log('Response from Flask:', data);
-            })
-            .catch((error) => {
-                errorToast("No internet connection!")
-                console.error('Error', error);
-            });
-        },2000)
+        fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=${questions.length}`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`},
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.status === 'ok'){
+                setQuestions([...questions, ...data.questions])
+                setShowLoader(false)
+            } else {
+                errorToast(data.message)
+            }
+            console.log('Response from Flask:', data);
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
 

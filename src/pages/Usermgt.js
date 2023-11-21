@@ -123,34 +123,32 @@ const Usermgt = () => {
         setSearchResults([])
         setMessage('')
         setShowLoader(true)
-        setTimeout(()=> {
-            fetch(`https://kbbackend.onrender.com/get_users?users=0&roles=${roles}&query=${query}&status=${status}`,{
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.code !== 0) {
-                    navigate('/login')
-                }
+        fetch(`https://kbbackend.onrender.com/get_users?users=0&roles=${roles}&query=${query}&status=${status}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.code !== 0) {
+                navigate('/login')
+            }
 
-                if (data.users.length === 0) {
-                    setMessage('No matches found')
-                } else {
-                    setMessage('')
-                }
-                setSearchResults(data.users)
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                setShowLoader(false)
-                errorToast('No internet connection!')
-                console.error('Error fetching users', error);
-            });
-        }, 2000)
+            if (data.users.length === 0) {
+                setMessage('No matches found')
+            } else {
+                setMessage('')
+            }
+            setSearchResults(data.users)
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            setShowLoader(false)
+            errorToast('No internet connection!')
+            console.error('Error fetching users', error);
+        });
     }
 
     function handleMail (e) {
@@ -192,30 +190,28 @@ const Usermgt = () => {
         setMessage('')
         setShowLoader(true)
         setQuery(e.target.value)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_users?users=0&query=${query}&status=${status}&roles=${roles}`,{
-                method: 'GET',
-                headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.code !== 0){
-                    navigate('/login')
-                }
-                if (data.users.length === 0) {
-                    setMessage('No matches found')
-                } else {
-                    setMessage('')
-                }
-                setSearchResults(data.users)
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                setShowLoader(false)
-                errorToast('No internet connection!')
-                console.error('Error fetching users', error);
-            });
-        }, 1000)   
+        fetch(`https://kbbackend.onrender.com/get_users?users=0&query=${query}&status=${status}&roles=${roles}`,{
+            method: 'GET',
+            headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.users.length === 0) {
+                setMessage('No matches found')
+            } else {
+                setMessage('')
+            }
+            setSearchResults(data.users)
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            setShowLoader(false)
+            errorToast('No internet connection!')
+            console.error('Error fetching users', error);
+        });
     }
 
     const handleSubmit = (e) => {
@@ -276,26 +272,23 @@ const Usermgt = () => {
 
     const getMoreUsers = () => {
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_users?users=${searchResults.length}&query=${query}&roles=${roles}&status=${status}`,{
-            method: 'GET',
-            headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.code !== 0) {
-                    navigate('/login')
-                }
-                
-                setSearchResults([...searchResults, ...data.users])
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                errorToast('No internet connection!')
-                console.error('Error fetching PDF books', error);
-            });  
-               
-        }, 2000); 
+        fetch(`https://kbbackend.onrender.com/get_users?users=${searchResults.length}&query=${query}&roles=${roles}&status=${status}`,{
+        method: 'GET',
+        headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.code !== 0) {
+                navigate('/login')
+            }
+            
+            setSearchResults([...searchResults, ...data.users])
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            errorToast('No internet connection!')
+            console.error('Error fetching PDF books', error);
+        });  
     }
 
     const handleDelete = (id) => {

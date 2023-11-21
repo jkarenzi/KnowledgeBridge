@@ -53,32 +53,30 @@ const Library = () => {
         setSearchResults([])
         setMessage('')
         setShowLoader(true)
-        setTimeout(()=> {
-            fetch(`https://kbbackend.onrender.com/get_books?books=0&categories=${categories}&levels=${levels}&query=${query}`,{
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.code !== 0) {
-                    navigate('/login')
-                }
+        fetch(`https://kbbackend.onrender.com/get_books?books=0&categories=${categories}&levels=${levels}&query=${query}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.code !== 0) {
+                navigate('/login')
+            }
 
-                if (data.pdf_books.length === 0) {
-                    setMessage('No matches found')
-                } else {
-                    setMessage('')
-                }
-                setSearchResults(data.pdf_books)
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                console.error('Error fetching PDF books', error);
-            });
-        }, 2000)
+            if (data.pdf_books.length === 0) {
+                setMessage('No matches found')
+            } else {
+                setMessage('')
+            }
+            setSearchResults(data.pdf_books)
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            console.error('Error fetching PDF books', error);
+        });
     }
 
     const handleCheck = (e) => {
@@ -139,56 +137,51 @@ const Library = () => {
         setSearchResults([])
         setMessage('')
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_books?books=0&query=${query}&categories=${categories}&levels=${levels}`,{
-                method: 'GET',
-                headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.code !== 0){
-                    navigate('/login')
-                }
-                if (data.pdf_books.length === 0) {
-                    setMessage('No matches found')
-                } else {
-                    setMessage('')
-                }
-                setSearchResults(data.pdf_books)
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                setShowLoader(false)
-                errorToast("No internet connection!")
-                console.error('Error fetching PDF books', error);
-            }); 
-        }, 2000)
+        fetch(`https://kbbackend.onrender.com/get_books?books=0&query=${query}&categories=${categories}&levels=${levels}`,{
+            method: 'GET',
+            headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.pdf_books.length === 0) {
+                setMessage('No matches found')
+            } else {
+                setMessage('')
+            }
+            setSearchResults(data.pdf_books)
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            setShowLoader(false)
+            errorToast("No internet connection!")
+            console.error('Error fetching PDF books', error);
+        }); 
     }
     
 
     const getMoreBooks = () => {
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_books?books=${searchResults.length}&query=${query}&categories=${categories}&levels=${levels}`,{
-            method: 'GET',
-            headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.code !== 0) {
-                    navigate('/login')
-                }
+        fetch(`https://kbbackend.onrender.com/get_books?books=${searchResults.length}&query=${query}&categories=${categories}&levels=${levels}`,{
+        method: 'GET',
+        headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.code !== 0) {
+                navigate('/login')
+            }
 
-                setSearchResults([...searchResults, ...data.pdf_books])
-                setShowLoader(false)
-            })
-            .catch((error) => {
-                setShowLoader(false)
-                errorToast("No internet connection!")
-                console.error('Error fetching PDF books', error);
-            });  
-               
-        }, 2000); 
+            setSearchResults([...searchResults, ...data.pdf_books])
+            setShowLoader(false)
+        })
+        .catch((error) => {
+            setShowLoader(false)
+            errorToast("No internet connection!")
+            console.error('Error fetching PDF books', error);
+        });  
     }
 
     const handleDelete = (id) => {

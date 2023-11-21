@@ -199,30 +199,28 @@ const HomeCommunity = () => {
 
     const getMorePosts = () => {
         setShowLoader(true)
-        setTimeout(() => {
-            fetch(`https://kbbackend.onrender.com/get_posts?query=${query}&posts=${posts.length}`,{
-                method: 'GET',
-                headers: {'Authorization': `Bearer ${token}`},
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.code !== 0){
-                    navigate('/login')
-                }
-                if (data.status === 'ok'){
-                    setPosts([...posts, ...data.posts])
-                    setShowLoader(false)
-                    console.log(posts)
-                } else {
-                    errorToast(data.message)
-                }
-                console.log('Response from Flask:', data);
-            })
-            .catch((error) => {
-                errorToast("No internet connection!")
-                console.error('Error', error);
-            });
-        },2000)
+        fetch(`https://kbbackend.onrender.com/get_posts?query=${query}&posts=${posts.length}`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`},
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.status === 'ok'){
+                setPosts([...posts, ...data.posts])
+                setShowLoader(false)
+                console.log(posts)
+            } else {
+                errorToast(data.message)
+            }
+            console.log('Response from Flask:', data);
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     return (
