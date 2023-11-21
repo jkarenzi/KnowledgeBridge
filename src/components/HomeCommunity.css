@@ -223,7 +223,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    background-color: rgba(192, 192, 192, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .post_profile_and_name {
@@ -431,5 +431,23 @@
 
 .dots_menu_13:hover {
     background: #f2f2f2;
+}
+
+.get_more_comments {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    height: 2rem;
+    border-radius: 20px;
+    background: #f2f2f2;
+    border: 1px solid lightgray;
+    cursor: pointer;
+}
+
+.get_more_comments:hover {
+    background-color: #e0e0e0;
 }
 

@@ -14,11 +14,13 @@ const Library = () => {
     const [ levels, setLevels ] = useState([])
     const [ message, setMessage ] = useState('')
     const [ addDeleteOverlay, setAddDeleteOverlay ] = useState({state:false, id:'', pdf:''})
+    const [view,setView] = useState({state:false,pdf:''})
+    const [download,setDownload] = useState({state:false,pdf:''})
 
     const navigate = useNavigate()
 
-    const token = localStorage.getItem('token')
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const token = localStorage.getItem('token')
     const [ showLoader, setShowLoader ] = useState(false)
 
      // Define a CSS loader for the Three Dots animation
@@ -52,7 +54,7 @@ const Library = () => {
         setMessage('')
         setShowLoader(true)
         setTimeout(()=> {
-            fetch(`http://localhost:5000/get_books?books=0&categories=${categories}&levels=${levels}&query=${query}`,{
+            fetch(`https://kbbackend.onrender.com/get_books?books=0&categories=${categories}&levels=${levels}&query=${query}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ const Library = () => {
             .catch((error) => {
                 console.error('Error fetching PDF books', error);
             });
-            }, 2000)
+        }, 2000)
     }
 
     const handleCheck = (e) => {
@@ -108,7 +110,7 @@ const Library = () => {
 
     useEffect(() => {
         // Fetch the list of PDF books from Flask backend
-        fetch('http://localhost:5000/get_books?books=0',{
+        fetch('https://kbbackend.onrender.com/get_books?books=0',{
             method: 'GET',
             headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
         })
@@ -138,12 +140,15 @@ const Library = () => {
         setMessage('')
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_books?books=0&query=${query}&categories=${categories}&levels=${levels}`,{
+            fetch(`https://kbbackend.onrender.com/get_books?books=0&query=${query}&categories=${categories}&levels=${levels}`,{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.pdf_books.length === 0) {
                     setMessage('No matches found')
                 } else {
@@ -164,7 +169,7 @@ const Library = () => {
     const getMoreBooks = () => {
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_books?books=${searchResults.length}&query=${query}&categories=${categories}&levels=${levels}`,{
+            fetch(`https://kbbackend.onrender.com/get_books?books=${searchResults.length}&query=${query}&categories=${categories}&levels=${levels}`,{
             method: 'GET',
             headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
             })
@@ -187,7 +192,7 @@ const Library = () => {
     }
 
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/delete_book/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_book/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`}
         })
@@ -239,6 +244,24 @@ const Library = () => {
                         <button onClick={closeDeleteOverlay}>Cancel</button>
                         <button onClick={() => {handleDelete(addDeleteOverlay.id)}}>Delete</button>
                     </div>
+                </div>
+            </div>}
+            {view.state && <div className="delete_overlay_big">
+                <div className="delete_overlay">
+                    <div className="delete_user_ask" style={{justifyContent:'space-between'}}>
+                        <h4 style={{color:'red'}}>Access Denied</h4>
+                        <img src='/images/close.png' width="15px" height="15px" onClick={()=> setView({state:false,pdf:''})} style={{marginRight:"1rem",cursor:'pointer'}}/>
+                    </div>
+                    <h4 id="this_will" style={{marginRight:'1rem'}}>You do not have view access for <span id="name_delete">{view.pdf}</span></h4>
+                </div>
+            </div>}
+            {download.state && <div className="delete_overlay_big">
+                <div className="delete_overlay">
+                    <div className="delete_user_ask" style={{justifyContent:'space-between'}}>
+                        <h4 style={{color:'red'}}>Access Denied</h4>
+                        <img src='/images/close.png' width="15px" height="15px" onClick={()=> setDownload({state:false,pdf:''})} style={{marginRight:"1rem",cursor:'pointer'}}/>
+                    </div>
+                    <h4 id="this_will" style={{marginRight:'1rem'}}>You do not have download access for <span id="name_delete">{download.pdf}</span></h4>
                 </div>
             </div>}
             <div className='big-book_container'>
@@ -316,7 +339,7 @@ const Library = () => {
                         </div>
                     </div>
                     <InfiniteScroll dataLength={searchResults.length} next={getMoreBooks} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>
-                        <Books bookList={searchResults} msg={message} token={token} setSearchResults={setSearchResults} userInfo={userInfo} setAddDeleteOverlay={setAddDeleteOverlay}/>
+                        <Books bookList={searchResults} msg={message} token={token} setSearchResults={setSearchResults} userInfo={userInfo} setView={setView} setDownload={setDownload} setAddDeleteOverlay={setAddDeleteOverlay}/>
                     </InfiniteScroll>
                 </div>
             </div>

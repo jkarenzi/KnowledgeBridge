@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import './HomeCommunity.css'
 import { useState, useEffect } from "react"
 import ReactQuill from 'react-quill';
@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css'; // Import the styles
 import { toast } from 'react-toastify';
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShowPosts from "./ShowPosts";
+import { Navigate } from "react-router-dom";
 
 
 const HomeCommunity = () => {
@@ -20,6 +21,7 @@ const HomeCommunity = () => {
     const [ query, setQuery ] = useState('')
     const [ showLoader, setShowLoader ] = useState(false)
     const [ message, setMessage ] = useState('')
+    const navigate = useNavigate()
 
      // Define a CSS loader for the Three Dots animation
     const ThreeDotsLoader = () => (
@@ -45,12 +47,15 @@ const HomeCommunity = () => {
 
     useEffect(()=>{
         setShowLoader(true)
-        fetch('http://localhost:5000/get_posts?posts=0',{
+        fetch('https://kbbackend.onrender.com/get_posts?posts=0',{
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setPosts(data.posts)
             } else {
@@ -59,6 +64,10 @@ const HomeCommunity = () => {
             setShowLoader(false)
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     },[])
 
     const handleAddSubmit = (e) => {
@@ -73,13 +82,16 @@ const HomeCommunity = () => {
         formData.append('question', question)
         formData.append('timestamp', timestamp)
         
-        fetch('http://localhost:5000/add_question',{
+        fetch('https://kbbackend.onrender.com/add_question',{
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`},
             body: formData
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 CloseComm()
                 showToast(data.message)
@@ -88,6 +100,10 @@ const HomeCommunity = () => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handlePostSubmit = (e) => {
@@ -101,13 +117,16 @@ const HomeCommunity = () => {
         formData.append('timestamp', timestamp)
         formData.append('user_post', userPost)
 
-        fetch('http://localhost:5000/add_post',{
+        fetch('https://kbbackend.onrender.com/add_post',{
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`},
             body: formData
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 CloseComm()
                 showToast(data.message)
@@ -116,6 +135,10 @@ const HomeCommunity = () => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const showAskCategory = () => {
@@ -151,12 +174,15 @@ const HomeCommunity = () => {
         setPosts([])
         setMessage('')
         setShowLoader(true)
-        fetch(`http://localhost:5000/get_posts?query=${query}&posts=0`,{
+        fetch(`https://kbbackend.onrender.com/get_posts?query=${query}&posts=0`,{
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.posts.length === 0) {
                 setMessage('No matches found')
             } else {
@@ -165,17 +191,24 @@ const HomeCommunity = () => {
             setPosts(data.posts)
             setShowLoader(false)
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const getMorePosts = () => {
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_posts?query=${query}&posts=${posts.length}`,{
+            fetch(`https://kbbackend.onrender.com/get_posts?query=${query}&posts=${posts.length}`,{
                 method: 'GET',
                 headers: {'Authorization': `Bearer ${token}`},
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.status === 'ok'){
                     setPosts([...posts, ...data.posts])
                     setShowLoader(false)
@@ -185,6 +218,10 @@ const HomeCommunity = () => {
                 }
                 console.log('Response from Flask:', data);
             })
+            .catch((error) => {
+                errorToast("No internet connection!")
+                console.error('Error', error);
+            });
         },2000)
     }
 
@@ -201,7 +238,7 @@ const HomeCommunity = () => {
             <div className="create_post">
                 <div className="create_post_1">
                     <div className="post_profile">
-                        <img src={userInfo.profile_url}/>
+                        <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                     </div>
                     <button onClick={OpenComm}>What do you want to ask or share?</button>
                 </div>
@@ -238,9 +275,9 @@ const HomeCommunity = () => {
                     {showAsk && <form id="add_form" onSubmit={handleAddSubmit}>
                         <div className="post_profile_and_name">
                             <div className="post_profile">
-                                <img src={userInfo.profile_url}/>
+                                <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                             </div>
-                            {userInfo.username}
+                            {userInfo?userInfo.username:<Navigate to="/login"/>}
                         </div>
                         <input type="text" placeholder='Start your question with "What","How", "Why" etc' onChange={(e)=>{setQuestion(e.target.value)}}/>
                         <button type="submit">Add question</button>
@@ -248,9 +285,9 @@ const HomeCommunity = () => {
                     {showPost && <form id="post_form" onSubmit={handlePostSubmit}>
                         <div className="post_profile_and_name">
                             <div className="post_profile">
-                                <img src={userInfo.profile_url}/>
+                                <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                             </div>
-                            {userInfo.username}
+                            {userInfo?userInfo.username:<Navigate to="/login"/>}
                         </div>
                         <ReactQuill
                             value={userPost}

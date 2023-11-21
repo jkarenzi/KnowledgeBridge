@@ -1,12 +1,15 @@
+import { Navigate, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import './Settings.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 
 const Settings = () => {
+    const navigate = useNavigate()
+
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     const token = localStorage.getItem('token')
-    
+
     const [ changeUsername, setChangeUsername ] = useState(false)
     const [ newUsername, setNewUsername ] = useState('')
     const [ password, setPassword ] = useState('')
@@ -18,6 +21,10 @@ const Settings = () => {
     const [ profile, setProfile ] = useState(null)
     const [ previewImage, setPreviewImage ] = useState(null)
     const [ profileActionOverlay, setProfileActionOverlay ] = useState(false)
+    const [ emailOverlay, setEmailOverlay ] = useState(false)
+    const [ aPassword, setAPassword ] = useState('')
+    const [ newEmail, setNewEmail ] = useState('')
+
     
 
     const openChangeUsername = () => {
@@ -66,7 +73,7 @@ const Settings = () => {
     };
 
     function handleRemove(id) {
-        fetch(`http://localhost:5000/remove_picture/${id}`,{
+        fetch(`https://kbbackend.onrender.com/remove_picture/${id}`,{
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -74,6 +81,9 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             closeProfileActionOverlay()
             if (data.status === 'not ok') {
                 errorToast(data.message)
@@ -107,14 +117,14 @@ const Settings = () => {
         setPreviewImage(null)
     }
 
-    const handleUsernameChange = (e) => {
+    const handleEmailChange = (e) => {
         e.preventDefault()
         const formData = new FormData()
-        formData.append('password', password)
-        formData.append('old_username', userInfo.username)
-        formData.append('new_username', newUsername)
+        formData.append('password', aPassword)
+        formData.append('username', userInfo.username)
+        formData.append('email', newEmail)
 
-        fetch('http://localhost:5000/change_username',{
+        fetch('https://kbbackend.onrender.com/change_email',{
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -123,6 +133,43 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.status === 'ok'){
+                localStorage.setItem('userInfo', JSON.stringify(data.user_info))
+                setEmailOverlay(false)
+                showToast(data.message)
+            } else {
+                errorToast(data.message)
+            }
+            console.log('Response from Flask:', data);
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
+    }
+
+    const handleUsernameChange = (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('password', password)
+        formData.append('old_username', userInfo.username)
+        formData.append('new_username', newUsername)
+
+        fetch('https://kbbackend.onrender.com/change_username',{
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 localStorage.setItem('userInfo', JSON.stringify(data.user_info))
                 closeChangeUsername()
@@ -147,7 +194,7 @@ const Settings = () => {
         formData.append('username', userInfo.username)
         
 
-        fetch('http://localhost:5000/change_password',{
+        fetch('https://kbbackend.onrender.com/change_password',{
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -156,6 +203,9 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 closeChangePassword()
                 showToast(data.message)
@@ -177,13 +227,16 @@ const Settings = () => {
         formData.append('user', userInfo.username)
         formData.append('email', userInfo.email)
 
-        fetch('http://localhost:5000/change_profile',{
+        fetch('https://kbbackend.onrender.com/change_profile',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`}
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             console.log(data)
             if (data.status === 'ok') {
                 localStorage.setItem('userInfo',  JSON.stringify(data.user_info))
@@ -193,6 +246,10 @@ const Settings = () => {
                 errorToast(data.message)
             }
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const links = [
@@ -206,7 +263,7 @@ const Settings = () => {
         <body className="settings_body">
             <Header links={links} userInfo={userInfo}/>
             <div className="settings_intro">
-                {userInfo.username}'s settings
+                {userInfo?userInfo.username:<Navigate to="/login"/>}'s settings
             </div>
             <div className="big_div_container_1">
                 <div className="big_div_container">
@@ -214,7 +271,7 @@ const Settings = () => {
                         <img id="edit_pic" src='/images/edit_pic.png' width="30px" height="30px" style={{cursor:'pointer'}} onClick={openProfileActionOverlay}/>
                         <div className="inner_profile_picture_1">
                             <div className="inner_profile_picture">
-                                <img src={userInfo.profile_url}/>
+                                {userInfo?<img src={userInfo.profile_url}/>:<Navigate to="/login"/>}
                             </div>
                         </div>
                         {profileActionOverlay && <div className='profile_actions_popup_9'>
@@ -225,17 +282,18 @@ const Settings = () => {
                     </div>
                     <div className="big_profile_picture_details_1">
                         <div className="big_profile_picture_details">
-                            <div className="profile_dets">
+                            {userInfo?!userInfo.google_auth && <div className="profile_dets">
                                 Email: <span id="profile_dets_email">{userInfo.email}</span>
-                            </div>
+                                <img src="/images/edit_details.png" width="20px" height="20px" onClick={()=> setEmailOverlay(true)}/>
+                            </div>:<Navigate to="/login"/>}
                             <div className="profile_dets">
-                                Username: <span id="profile_dets_email">{userInfo.username}</span>
+                                Username: <span id="profile_dets_email">{userInfo?userInfo.username:<Navigate to="/login"/>}</span>
                                 <img src="/images/edit_details.png" width="20px" height="20px" onClick={openChangeUsername}/>
                             </div>
-                            <div className="profile_dets">
+                            {userInfo?!userInfo.google_auth && <div className="profile_dets">
                                 Password: <span id="profile_dets_email">*************</span>
                                 <img src="/images/edit_details.png" width="20px" height="20px" onClick={openChangePassword}/>
-                            </div>
+                            </div>:<Navigate to="/login"/>}
                         </div>
                     </div>
                 </div>
@@ -299,6 +357,26 @@ const Settings = () => {
                             {previewImage && <img src={previewImage} style={{objectFit:'cover'}} alt="Preview" width="200px" height="150px"/>}
                         </div> 
                         <button type="submit">Upload</button> 
+                    </form>
+                </div>
+            </div>}
+            {emailOverlay && <div className="change_password_big">
+                <div className="change_username">
+                    <div id="title_101">
+                        <h4>Change Email</h4>
+                        <img src="/images/close.png" width="20px" height="20px" onClick={()=> setEmailOverlay(false)}/> 
+                    </div>    
+                    <h4>Confirm its you</h4>
+                    <form onSubmit={handleEmailChange}>
+                        <div className="one_1">
+                            <label>Password</label>
+                            <input type="password" onChange={(e)=> {setAPassword(e.target.value)}} required/>     
+                        </div>
+                        <div className="one_1">
+                            <label>New Email</label>
+                            <input type="email" onChange={(e)=> {setNewEmail(e.target.value)}} required/>   
+                        </div>
+                        <button type="submit">Submit</button>
                     </form>
                 </div>
             </div>}

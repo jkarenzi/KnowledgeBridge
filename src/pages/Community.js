@@ -2,10 +2,13 @@ import Header from "../components/Header"
 import './Community.css'
 import { Link, Outlet } from "react-router-dom"
 import { useLocation } from "react-router-dom"
+import { useState } from "react"
 
 const Community = () => {
     const location = useLocation()
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const token = localStorage.getItem('token')
+    
 
     const links = [
         {id: 1, text: 'Community', url: '/community', icon:'/images/community.png'},

@@ -7,10 +7,13 @@ import { toast } from 'react-toastify';
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ViewBook from "./ViewBook";
+import { Navigate } from "react-router-dom";
 
 
 const Usermgt = () => {
     const location = useLocation()
+    const [priv, setPriv] = useState('')
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [ email, setEmail ] = useState("")
@@ -20,9 +23,9 @@ const Usermgt = () => {
     const [ addUserOverlay, setAddUserOverlay ] = useState(false)
     const [ addDeleteOverlay, setAddDeleteOverlay ] = useState({state:false, id:'',user:''})
     const [ addAdminOverlay, setAddAdminOverlay ] = useState({state:false, id:'',user:''})
+    const [ addUseOverlay, setAddUseOverlay ] = useState({state:false, id:'',user:''})
     const [ showLoader, setShowLoader ] = useState(false)
     const [ query, setQuery ] = useState('')
-    const token = localStorage.getItem('token')
     const [ roles, setRoles ] = useState([])
     const [ status, setStatus ] = useState([])
     const [ profile, setProfile ] = useState(null)
@@ -32,9 +35,14 @@ const Usermgt = () => {
     const [ addMailOverlay, setAddMailOverlay ] = useState({state:false,user_id:'',email:''})
     const [ subject, setSubject ] = useState('')
     const [ mailBody, setMailBody ] = useState('')
+    const [ privilegesOverlay, setPrivilegesOverlay ] = useState({state:false,username:'',user_id:"",admin:'',profile_url:''})
+    const [ isView, setIsView ] = useState(false)
+    const [ isDownload, setIsDownload ] = useState(false)
 
     const navigate = useNavigate()
+    
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const token = localStorage.getItem('token')
 
     const ThreeDotsLoader = () => (
         <div className="loader">
@@ -116,7 +124,7 @@ const Usermgt = () => {
         setMessage('')
         setShowLoader(true)
         setTimeout(()=> {
-            fetch(`http://localhost:5000/get_users?users=0&roles=${roles}&query=${query}&status=${status}`,{
+            fetch(`https://kbbackend.onrender.com/get_users?users=0&roles=${roles}&query=${query}&status=${status}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -151,13 +159,16 @@ const Usermgt = () => {
         formData.append('email', addMailOverlay.email)
         formData.append('subject', subject)
         formData.append('body', mailBody)
-        fetch('http://localhost:5000/send_mail',{
+        fetch('https://kbbackend.onrender.com/send_mail',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`}
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             console.log(data)
             if (data.status === 'ok') {
                 close()
@@ -166,6 +177,10 @@ const Usermgt = () => {
                 errorToast(data.message)
             }                     
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     useEffect(() => {
@@ -178,12 +193,15 @@ const Usermgt = () => {
         setShowLoader(true)
         setQuery(e.target.value)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_users?users=0&query=${query}&status=${status}&roles=${roles}`,{
+            fetch(`https://kbbackend.onrender.com/get_users?users=0&query=${query}&status=${status}&roles=${roles}`,{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.users.length === 0) {
                     setMessage('No matches found')
                 } else {
@@ -209,7 +227,7 @@ const Usermgt = () => {
         formData.append('role', role)
         formData.append('profile', profile)
 
-        fetch('http://localhost:5000/add_user',{
+        fetch('https://kbbackend.onrender.com/add_user',{
             method: 'POST',
             body: formData,
             headers: {
@@ -218,6 +236,9 @@ const Usermgt = () => {
         })    
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok') {
                 closeOverlay()
                 showToast(data.message)
@@ -234,7 +255,7 @@ const Usermgt = () => {
 
     useEffect(() => {
         // Fetch the list of PDF books from Flask backend
-        fetch('http://localhost:5000/get_users?users=0',{
+        fetch('https://kbbackend.onrender.com/get_users?users=0',{
             method: 'GET',
             headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
         })
@@ -256,7 +277,7 @@ const Usermgt = () => {
     const getMoreUsers = () => {
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_users?users=${searchResults.length}&query=${query}&roles=${roles}&status=${status}`,{
+            fetch(`https://kbbackend.onrender.com/get_users?users=${searchResults.length}&query=${query}&roles=${roles}&status=${status}`,{
             method: 'GET',
             headers: {'Content-Type': 'application/json','Authorization': `Bearer ${token}`}
             })
@@ -278,7 +299,7 @@ const Usermgt = () => {
     }
 
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/delete_user/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_user/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`}
         })
@@ -310,13 +331,16 @@ const Usermgt = () => {
         formData.append('user', showChangeOverlay.user)
         formData.append('email', showChangeOverlay.email)
 
-        fetch('http://localhost:5000/change_profile',{
+        fetch('https://kbbackend.onrender.com/change_profile',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`}
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             console.log(data)
             if (data.status === 'ok') {
                 setSearchResults(searchResults.map((result) => {
@@ -332,19 +356,26 @@ const Usermgt = () => {
                 errorToast(data.message)
             }
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handleElevate = (id) => {
         const formData = new FormData()
         formData.append('id',id)
 
-        fetch('http://localhost:5000/elevate_privileges',{
+        fetch('https://kbbackend.onrender.com/elevate_privileges',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`}
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             console.log(data)
             if (data.status === 'ok') {
                 setAddAdminOverlay({state:false,id:'',user:''})
@@ -353,7 +384,40 @@ const Usermgt = () => {
                 setAddAdminOverlay({state:false,id:'',user:''})
                 errorToast(data.message)
             }
-        })   
+        })  
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        }); 
+    }
+
+    const handleDiminish = (id) => {
+        const formData = new FormData()
+        formData.append('id',id)
+
+        fetch('https://kbbackend.onrender.com/diminish_privileges',{
+            method: 'POST',
+            body: formData,
+            headers: {'Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            console.log(data)
+            if (data.status === 'ok') {
+                setAddUseOverlay({state:false,id:'',user:''})
+                showToast(data.message)
+            }else {
+                setAddUseOverlay({state:false,id:'',user:''})
+                errorToast(data.message)
+            }
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const links = [
@@ -379,6 +443,167 @@ const Usermgt = () => {
         const inputField = document.getElementById('change_pic')
         inputField.value = null
         setPreviewImage(null)
+    }
+
+    const openElevate = (id,username) => {
+        setPrivilegesOverlay({...privilegesOverlay,state:false})
+        setAddAdminOverlay({state:true,id:id,user:username})
+    }
+
+    const openDiminish = (id,username) => {
+        setPrivilegesOverlay({...privilegesOverlay,state:false})
+        setAddUseOverlay({state:true,id:id,user:username})
+    }
+
+    const removeView = (id) => {
+        fetch(`https://kbbackend.onrender.com/remove_view/${id}`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            console.log(data)
+            if (data.status === 'ok') {
+                setSearchResults(searchResults.map((user) => {
+                    if (user.user_id === id){
+                        const object = {
+                            'user_id': user.user_id,
+                            'username': user.username,
+                            'email': user.email,
+                            'profile_url': user.profile_url,
+                            'google_auth': user.google_auth,
+                            'view_book': false,
+                            'download_book': user.download_book,
+                            'subscribed': user.subscribed
+                        }
+                        return object
+                    }else{
+                        return user
+                    }
+                }))
+                setIsView(false)
+                showToast(data.message)
+            }else {
+                errorToast(data.message)
+            }
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
+    }
+
+    const removeDownload = (id) => {
+        fetch(`https://kbbackend.onrender.com/remove_download/${id}`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            console.log(data)
+            if (data.status === 'ok') {
+                setSearchResults(searchResults.map((user) => {
+                    if (user.user_id === id){
+                        const object = {
+                            'user_id': user.user_id,
+                            'username': user.username,
+                            'email': user.email,
+                            'profile_url': user.profile_url,
+                            'google_auth': user.google_auth,
+                            'view_book': user.view_book,
+                            'download_book': false,
+                            'subscribed': user.subscribed
+                        }
+                        return object
+                    }else{
+                        return user
+                    }
+                }))
+                setIsDownload(false)
+                showToast(data.message)
+            }else {
+                errorToast(data.message)
+            }
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
+    }
+
+    const grantPrivilege = (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('privilege',priv)
+        formData.append('id',privilegesOverlay.user_id)
+
+        fetch('https://kbbackend.onrender.com/grant_privilege',{
+            method: 'POST',
+            body: formData,
+            headers: {'Authorization': `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            console.log(data)
+            if (data.status === 'ok') {
+                if (priv === 'View'){
+                    setSearchResults(searchResults.map((user) => {
+                        if (user.user_id === privilegesOverlay.user_id){
+                            const object = {
+                                'user_id': user.user_id,
+                                'username': user.username,
+                                'email': user.email,
+                                'profile_url': user.profile_url,
+                                'google_auth': user.google_auth,
+                                'view_book': true,
+                                'download_book': user.download_book,
+                                'subscribed': user.subscribed
+                            }
+                            return object
+                        }else{
+                            return user
+                        }
+                    }))
+                    setIsView(true)
+                }else if(priv === 'Download'){
+                    setSearchResults(searchResults.map((user) => {
+                        if (user.user_id === privilegesOverlay.user_id){
+                            const object = {
+                                'user_id': user.user_id,
+                                'username': user.username,
+                                'email': user.email,
+                                'profile_url': user.profile_url,
+                                'google_auth': user.google_auth,
+                                'view_book': user.view_book,
+                                'download_book': true,
+                                'subscribed': user.subscribed
+                            }
+                            return object
+                        }else{
+                            return user
+                        }
+                    }))
+                    setIsDownload(true)
+                }
+                showToast(data.message)
+            }else {
+                errorToast(data.message)
+            }
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
+
     }
 
     return (
@@ -476,7 +701,7 @@ const Usermgt = () => {
             </div>}
             <div className="user_mgt_intro">
                 <h3>User Management System</h3>
-                <h4>Hello, {userInfo.username}</h4>
+                <h4>Hello, {userInfo?userInfo.username:<Navigate to="/login"/>}</h4>
             </div>
             {addDeleteOverlay.state && <div className="delete_overlay_big">
                 <div className="delete_overlay">
@@ -497,8 +722,60 @@ const Usermgt = () => {
                     </div>
                     <h4 id="this_will">This will elevate privileges for <span id="name_delete">{addAdminOverlay.user}</span></h4>
                     <div className="delete_and_cancel">
-                        <button onClick={() => setAddAdminOverlay({state:false, id:'',user:''})}>Cancel</button>
+                        <button onClick={() => {setPrivilegesOverlay({...privilegesOverlay,state:true}); setAddAdminOverlay({state:false, id:'',user:''})}}>Cancel</button>
                         <button style={{background:'#FF8400'}} onClick={() => {handleElevate(addAdminOverlay.id)}}>Confirm</button>
+                    </div>
+                </div>
+            </div>}
+            {addUseOverlay.state && <div className="delete_overlay_big">
+                <div className="delete_overlay">
+                    <div className="delete_user_ask">
+                        <h4>Diminish privileges?</h4>
+                    </div>
+                    <h4 id="this_will">This will diminish privileges for <span id="name_delete">{addUseOverlay.user}</span></h4>
+                    <div className="delete_and_cancel">
+                        <button onClick={() => {setPrivilegesOverlay({...privilegesOverlay,state:true}); setAddUseOverlay({state:false, id:'',user:''})}}>Cancel</button>
+                        <button style={{background:'#FF8400'}} onClick={() => {handleDiminish(addUseOverlay.id)}}>Confirm</button>
+                    </div>
+                </div>
+            </div>}
+            {privilegesOverlay.state && <div className="delete_overlay_big">
+                <div className="privileges_overlay">
+                    <div id="title_101">
+                        <h4 style={{fontSize:'larger', fontWeight:'600'}}>Roles and privileges</h4>
+                        <img src="/images/close.png" width="20px" height="20px" onClick={()=> setPrivilegesOverlay({state:false,username:'',user_id:"",admin:'',profile_url:''})}/> 
+                    </div>
+                    <div className="post_profile_and_name" style={{fontSize:'medium',marginLeft:'1.5rem'}}>
+                        <div className="post_profile" style={{width:'3rem',height:'3rem'}}>
+                            <img src={privilegesOverlay.profile_url}/>
+                        </div>
+                        {privilegesOverlay.username}
+                    </div>
+                    <div className="profile_dets" style={{background:'#f2f2f2',height:'2rem',width:'26rem',paddingLeft:'1rem',marginLeft:'1.5rem'}}>
+                        Role: <span id="profile_dets_email">{privilegesOverlay.admin?'Administrator':'User'}</span>
+                        {privilegesOverlay.admin?
+                            <img src="/images/diminish.png" width='15px' height='15px' style={{marginLeft:'13rem'}} onClick={() => {openDiminish(privilegesOverlay.user_id,privilegesOverlay.username)}}/>:
+                            <img src="/images/elevate.png" width='15px' height='15px' style={{marginLeft:'17rem'}} onClick={() => {openElevate(privilegesOverlay.user_id,privilegesOverlay.username)}}/>
+                        }
+                    </div>
+                    <div className="overlay_priv">
+                        <h4>Privileges</h4>
+                        <form onSubmit={grantPrivilege} style={{display:'flex', gap:'3rem',alignItems:'center',marginBottom: '0.5rem'}} required>
+                            <select id="priv_select" onChange={(e) => setPriv(e.target.value)}required>
+                                <option value="" disabled selected>Select Privilege</option>
+                                <option value="View">View access</option>
+                                <option value="Download">Download access</option>
+                            </select>
+                            <button type="submit">Add</button>
+                        </form> 
+                        {isView && <div className="profile_dets" style={{background:'#f2f2f2',height:'2rem',width:'25rem',fontFamily: "'Inconsolata',monospace",paddingLeft:'1rem',paddingRight:'1rem',justifyContent:'space-between',marginLeft:'0'}}>
+                            View Access
+                            <img src="/images/delete.png" width="15px" height="15px" onClick={()=> removeView(privilegesOverlay.user_id)}/>
+                        </div>}
+                        {isDownload && <div className="profile_dets" style={{background:'#f2f2f2',height:'2rem',width:'25rem',fontFamily: "'Inconsolata',monospace",paddingLeft:'1rem',paddingRight:'1rem',justifyContent:'space-between',marginLeft:'0'}}>
+                            Download Access
+                            <img src="/images/delete.png" width="15px" height="15px" onClick={()=> removeDownload(privilegesOverlay.user_id)}/>
+                        </div>}
                     </div>
                 </div>
             </div>}
@@ -560,12 +837,12 @@ const Usermgt = () => {
                         </div>
                     </div>
                     <InfiniteScroll style={{overflow:"unset"}} dataLength={searchResults.length} next={getMoreUsers} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>
-                        <Users setAddAdminOverlay={setAddAdminOverlay} setAddMailOverlay={setAddMailOverlay} usersList={searchResults} setSearchResults={setSearchResults} msg={message} token={token} userInfo={userInfo} setAddDeleteOverlay={setAddDeleteOverlay} setShowChangeOverlay={setShowChangeOverlay} setAddProfileOverlay={setAddProfileOverlay}/>
+                        <Users setIsDownload={setIsDownload} setIsView={setIsView} setAddAdminOverlay={setAddAdminOverlay} setAddMailOverlay={setAddMailOverlay} usersList={searchResults} setSearchResults={setSearchResults} msg={message} token={token} userInfo={userInfo} setAddDeleteOverlay={setAddDeleteOverlay} setShowChangeOverlay={setShowChangeOverlay} setAddProfileOverlay={setAddProfileOverlay} setPrivilegesOverlay={setPrivilegesOverlay}/>
                     </InfiniteScroll>
                 </div>
             </div>
         </body>
     );
 }
- 
+
 export default Usermgt;

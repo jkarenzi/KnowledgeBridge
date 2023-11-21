@@ -9,29 +9,57 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate()
-    const [ user, setUser ] = useState({});
       
     function handleCallbackResponse(response) {
-      console.log("Encoded JWT Token: " + response.credential);
-      var userObject = jwt_decode(response.credential);
-      console.log(userObject);
-      setUser(userObject);
+        console.log("Encoded JWT Token: " + response.credential);
+        const userObject = jwt_decode(response.credential);
+        console.log(userObject);
+
+        const formData = new FormData()
+        formData.append('username',userObject.name)
+        formData.append('email',userObject.email)
+        formData.append('profile_url',userObject.picture)
+
+        fetch('https://kbbackend.onrender.com/google_login',{
+            method: 'POST',
+            body: formData
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 'ok'){
+                localStorage.setItem('token', data.token)
+                localStorage.setItem('userInfo', JSON.stringify(data.user_info))
+                navigate('/library')
+                showToast()
+            } else {
+                errorToast(data.message)
+            }
+            console.log('Response from Flask:', data);
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
     
     useEffect(() => {
         /* global google */
-        const google = window.google;
-        google.accounts.id.initialize({
-            client_id: "582051729507-iabd2a7mfi5abvncgh15ih436o0e50ku.apps.googleusercontent.com",
-            callback: handleCallbackResponse
-        })
+        try {
+            const google = window.google;
+            google.accounts.id.initialize({
+                client_id: "582051729507-iabd2a7mfi5abvncgh15ih436o0e50ku.apps.googleusercontent.com",
+                callback: handleCallbackResponse
+            })
 
-        google.accounts.id.renderButton(
-            document.getElementById('signInDiv'),
-            {theme: 'outline', size: 'large'}
-        );
-    
-        google.accounts.id.prompt(); 
+            google.accounts.id.renderButton(
+                document.getElementById('signInDiv'),
+                {theme: 'outline', size: 'large'}
+            );
+        
+            google.accounts.id.prompt(); 
+        } catch(err) {
+            window.location.reload()
+        }
     },[])
     
 
@@ -52,7 +80,7 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch('http://localhost:5000/login',{
+        fetch('https://kbbackend.onrender.com/login',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(formData)

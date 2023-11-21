@@ -4,7 +4,7 @@ import '../components/Books.css';
 const ViewBook = () => {
     const { id } = useParams()
     console.log(id)
-    const url = `http://localhost:5000/get_pdf/${id}`
+    const url = `https://kbbackend.onrender.com/get_pdf/${id}`
 
     return (
         <body className="view_body">

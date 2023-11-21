@@ -4,17 +4,19 @@ import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const location = useLocation()
+    const navigate = useNavigate()
     const [ category, setCategory ] = useState('')
     const [ level, setLevel ] = useState('')
     const [ pdfFiles, setPdfFiles ] = useState(null);
     const [countData, setCountData ] = useState([])
     const [ showLoader, setShowLoader ] = useState(false)
 
-    const token = localStorage.getItem('token')
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const token = localStorage.getItem('token')
     console.log(token)
     
     const ThreeDotsLoader = () => (
@@ -39,7 +41,7 @@ const Admin = () => {
 
     useEffect(() => {
         setShowLoader(true)
-        fetch('http://localhost:5000/get_info_books',{
+        fetch('https://kbbackend.onrender.com/get_info_books',{
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -47,9 +49,16 @@ const Admin = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             setCountData(data.category_count)
             setShowLoader(false)
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     },[])
 
     const handleSubmit = (e) => {
@@ -62,7 +71,7 @@ const Admin = () => {
             formData.append('files', pdfFiles[i])
         }
         
-        fetch('http://localhost:5000/add_books',{
+        fetch('https://kbbackend.onrender.com/add_books',{
             method: 'POST',
             body: formData,
             headers: {
@@ -71,6 +80,9 @@ const Admin = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'success'){
                 showToast(data.message)
             }else{
@@ -78,6 +90,10 @@ const Admin = () => {
             }
             console.log(data)
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const links = [

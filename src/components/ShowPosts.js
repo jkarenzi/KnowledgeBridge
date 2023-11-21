@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { toast } from 'react-toastify';
 import './HomeCommunity.css'
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ShowPosts = (props) => {
     const [ dotsmenu, setDotsMenu ] = useState({state:false,id:''})
@@ -8,11 +9,22 @@ const ShowPosts = (props) => {
     const [ userComment, setUserComment ] = useState('')
     const [ commentOverlay, setCommentOverlay ] = useState({state:false, post_id:''})
     const [ comments, setComments ] = useState([])
+    const [ showCommLoader, setShowCommLoader ] = useState(false)
+    const [ showGetLoader, setShowGetLoader ] = useState(false)
+    const navigate = useNavigate()
 
     const posts = props.posts
     const userInfo = props.userInfo
     const token = props.token
     const setPosts = props.setPosts
+
+    const ThreeDotsLoader = () => (
+        <div className="loader" style={{alignSelf:'center'}}>
+        <div className="dot dot1"></div>
+        <div className="dot dot2"></div>
+        <div className="dot dot3"></div>
+        </div>
+    );
 
     const showToast = (msg) => {
         toast.success(msg, {
@@ -30,7 +42,7 @@ const ShowPosts = (props) => {
         const formData = new FormData()
         formData.append('user_id', userInfo.user_id)
         formData.append('post_id', id)
-        fetch('http://localhost:5000/like',{
+        fetch('https://kbbackend.onrender.com/like',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`},
@@ -61,13 +73,17 @@ const ShowPosts = (props) => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handleDislike = (id) => {
         const formData = new FormData()
         formData.append('user_id', userInfo.user_id)
         formData.append('post_id', id)
-        fetch('http://localhost:5000/dislike',{
+        fetch('https://kbbackend.onrender.com/dislike',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`},
@@ -98,7 +114,10 @@ const ShowPosts = (props) => {
             }
             console.log('Response from Flask:', data);
         })
-
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handleCommentSubmit = (e) => {
@@ -112,13 +131,16 @@ const ShowPosts = (props) => {
         formData.append('post_id', commentOverlay.post_id)
         formData.append('comment', userComment)
         formData.append('timestamp', timestamp)
-        fetch('http://localhost:5000/add_comment',{
+        fetch('https://kbbackend.onrender.com/add_comment',{
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`},
             body: formData
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setPosts(posts.map((post) => {
                     if (post.post_id === commentOverlay.post_id){
@@ -145,32 +167,73 @@ const ShowPosts = (props) => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const getComments = (id) => {
+        setShowGetLoader(true)
         setCommentOverlay({state:!commentOverlay.state,post_id:id})
-        fetch(`http://localhost:5000/get_comments/${id}`,{
+        fetch(`https://kbbackend.onrender.com/get_comments/${id}?comments=0`,{
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setComments(data.comments)
             } else {
                 errorToast(data.message)
             }
+            setShowGetLoader(false)
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
+    }
+
+    const getMoreComments = (id) => {
+        setShowCommLoader(true)
+        fetch(`https://kbbackend.onrender.com/get_comments/${id}?comments=${comments.length}`,{
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`},
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
+            if (data.status === 'ok'){
+                setComments([...comments,...data.comments])
+            } else {
+                errorToast(data.message)
+            }
+            setShowCommLoader(false)
+            console.log('Response from Flask:', data);
+        })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handlePostDelete = (id) => {
-        fetch(`http://localhost:5000/delete_post/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_post/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setPosts(posts.filter((post) => post.post_id !== id ))
                 setDotsMenu({state:false,id:''})
@@ -180,15 +243,22 @@ const ShowPosts = (props) => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handleCommentDelete = (id) => {
-        fetch(`http://localhost:5000/delete_comment/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_comment/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setPosts(posts.map((post) => {
                     if (post.post_id === commentOverlay.post_id){
@@ -215,6 +285,10 @@ const ShowPosts = (props) => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     if (posts.length === 0) {
@@ -248,7 +322,7 @@ const ShowPosts = (props) => {
                             <img src="/images/comment.png" width="20px" height="20px" onClick={() => getComments(post.post_id)}/>
                             <div>{post.comments}</div>
                         </div>
-                        {(userInfo.username === post.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:post.post_id})} className='three_dots_img' src="/images/dots.png"/>}
+                        {userInfo?(userInfo.username === post.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:post.post_id})} className='three_dots_img' src="/images/dots.png"/>:<Navigate to="/login"/>}
                         {(dotsmenu.state && dotsmenu.id === post.post_id) && <div className="dots_menu">
                             <img src="/images/close.png" width="12px" height="12px" onClick={() => setDotsMenu({state:false,id:''})}/>
                             <div className="dots_menu_13" onClick={() => handlePostDelete(dotsmenu.id)}>Delete post</div>
@@ -257,14 +331,15 @@ const ShowPosts = (props) => {
                     {(commentOverlay.state && commentOverlay.post_id === post.post_id) && <div className="comment_big">
                         <div className="create_comment">
                             <div className="post_profile_5" style={{width:'2.5rem', height:'2.5rem'}}>
-                                <img src={userInfo.profile_url}/>
+                                <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                             </div>
                             <form onSubmit={handleCommentSubmit}>
                                 <input type="text" required placeholder="Add a comment..." onChange={(e) => {setUserComment(e.target.value)}}/>
                                 <button type="submit">Add comment</button>
                             </form> 
                         </div>
-                        {comments.map((comment) => (
+                        {showGetLoader && <ThreeDotsLoader/>}
+                        {comments.map((comment, index) => (
                             <div className="ind_comment">
                                 <div className="profile_and_info" style={{marginTop:0}}>    
                                     <div className="post_profile_5" style={{width:'2.5rem', height:'2.5rem'}}>
@@ -279,6 +354,8 @@ const ShowPosts = (props) => {
                                     {comment.comment}
                                 </div>
                                 {(userInfo.username === comment.username || userInfo.admin) && <img onClick={() => setCommentDotsMenu({state:true,id:comment.comment_id})} className='three_dots_img_1' src="/images/dots.png"/>}
+                                {(index === (comments.length - 1)) && <button className='get_more_comments' onClick={() => getMoreComments(comment.post_id)}>View more comments</button>}
+                                {(showCommLoader && (index === (comments.length - 1))) && <ThreeDotsLoader/>}
                                 {(commentDotsMenu.state && commentDotsMenu.id === comment.comment_id) && <div className="dots_menu">
                                     <img src="/images/close.png" width="12px" height="12px" onClick={() => setCommentDotsMenu({state:false,id:''})}/>
                                     <div className="dots_menu_13" onClick={() => handleCommentDelete(commentDotsMenu.id)}>Delete comment</div>

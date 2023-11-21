@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const ShowQuestions = (props) => {
     const [ dotsmenu, setDotsMenu ] = useState({state:false,id:''})
@@ -36,12 +37,15 @@ const ShowQuestions = (props) => {
     }
 
     const handleQuestionDelete = (id) => {
-        fetch(`http://localhost:5000/delete_question/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_question/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setQuestions(questions.filter((question) => question.question_id !== id ))
                 setDotsMenu({state:false,id:''})
@@ -51,6 +55,10 @@ const ShowQuestions = (props) => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     if (questions.length === 0){
@@ -77,7 +85,7 @@ const ShowQuestions = (props) => {
                             Answer
                             <img src='/images/answer.png' width="15px" height="15px"/>
                         </button>
-                        {(userInfo.username === question.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:question.question_id})} className='three_dots_img' src="/images/dots.png"/>}
+                        {userInfo?(userInfo.username === question.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:question.question_id})} className='three_dots_img' src="/images/dots.png"/>:<Navigate to="/login"/>}
                         {(dotsmenu.state && dotsmenu.id === question.question_id) && <div className="dots_menu">
                             <img src="/images/close.png" width="12px" height="12px" onClick={() => setDotsMenu({state:false,id:''})}/>
                             <div className="dots_menu_13" onClick={() => handleQuestionDelete(dotsmenu.id)}>Delete question</div>

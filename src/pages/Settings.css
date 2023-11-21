@@ -106,7 +106,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    background-color: rgba(192, 192, 192, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .change_password_big, .change_profile_set_big {
@@ -117,7 +117,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    background-color: rgba(192, 192, 192, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .change_password {

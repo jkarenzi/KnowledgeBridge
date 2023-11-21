@@ -52,7 +52,7 @@ const Users = (props) => {
     };
 
     function handleRemove(id) {
-        fetch(`http://localhost:5000/remove_picture/${id}`,{
+        fetch(`https://kbbackend.onrender.com/remove_picture/${id}`,{
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -60,6 +60,9 @@ const Users = (props) => {
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             console.log(data)
             if (data.status === 'not ok') {
                 errorToast(data.message)
@@ -113,7 +116,7 @@ const Users = (props) => {
                             </div>
                         </div>
                         <div className='options_mgt'>
-                            <img src='/images/make-admin.png' width="18px" height="18px" style={{marginBottom:'0.1rem'}} onClick={() => props.setAddAdminOverlay({state:true,id:user.user_id,user:user.username})}/>
+                            <img src='/images/make-admin.png' width="18px" height="18px" style={{marginBottom:'0.1rem'}} onClick={() => {props.setIsView(user.view_book?true:false); props.setIsDownload(user.download_book?true:false); props.setPrivilegesOverlay({state:true,username:user.username,user_id:user.user_id,admin:user.admin,profile_url:user.profile_url,view_book:user.view_book,download_book:user.download_book,subscribed:user.subscribed})}}/>
                             <img src='/images/mail.png' width="18px" height="20px" onClick={()=> {open(user.user_id, user.email)}} style={{marginTop:'0.1rem'}}/>
                             <img src='/images/delete.png' width="18px" height="20px" onClick={()=> {openDeleteOverlay(user.user_id, user.username)}}/>
                         </div>

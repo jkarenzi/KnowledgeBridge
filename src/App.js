@@ -18,16 +18,20 @@ import Following from './components/Following';
 import Answer from './components/Answer';
 import Settings from './pages/Settings';
 import ViewAnswers from './components/ViewAnswers';
+import Home from './pages/Home';
+import { useState } from 'react';
+import CustomPage from './pages/CustomPage';
 
 
 function App() {
-  const token = localStorage.getItem('token')
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')))
+  const [token,setToken] = useState(localStorage.getItem('token'))
   console.log(token)
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/'>
+        <Route index element={<Home/>}/>
         <Route path='login' element={<Login/>}/>
         <Route path='signup' element={<Signup/>}/>
         <Route path='library' element={token && userInfo?<Library/>:<Navigate to='/login'/>}/>
@@ -43,6 +47,7 @@ function App() {
           <Route path='answer' element={<Answer/>}/>
         </Route>
         <Route path='settings' element={token && userInfo?<Settings/>:<Navigate to='/login'/>}/>
+        <Route path='*' element={<CustomPage/>}/>
       </Route>
     )
   )

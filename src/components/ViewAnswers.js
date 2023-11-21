@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import Header from "./Header";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import './ViewAnswers.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useNavigate } from "react-router-dom";
 
 const ViewAnswers = () => {
     const { id } = useParams()
@@ -19,6 +20,7 @@ const ViewAnswers = () => {
     const [ openAnswerOverlay, setOpenAnswerOverlay ] = useState({state:false, question:'', question_id:''})
     const [ dotsmenu, setDotsMenu ] = useState({state:false,id:''})
     const [ showLoader, setShowLoader ] = useState(false)
+    const navigate = useNavigate()
 
     const ThreeDotsLoader = () => (
         <div className="loader">
@@ -52,16 +54,21 @@ const ViewAnswers = () => {
     };
 
     useEffect(()=>{
-        fetch(`http://localhost:5000/get_answers/${id}?answers=0`,{
+        setShowLoader(true)
+        fetch(`https://kbbackend.onrender.com/get_answers/${id}?answers=0`,{
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setAnswers(data.answers)
                 setQuestion(data.question)
-            }    
+            }  
+            setShowLoader(false)  
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
@@ -83,13 +90,16 @@ const ViewAnswers = () => {
         formData.append('question', openAnswerOverlay.question)
         formData.append('answer', userAnswer)
         formData.append('timestamp',timestamp)
-        fetch('http://localhost:5000/add_answer',{
+        fetch('https://kbbackend.onrender.com/add_answer',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 closeAnswer()
                 showToast(data.message)
@@ -98,15 +108,22 @@ const ViewAnswers = () => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const handleAnswerDelete = (id) => {
-        fetch(`http://localhost:5000/delete_answer/${id}`,{
+        fetch(`https://kbbackend.onrender.com/delete_answer/${id}`,{
             method: 'DELETE',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setAnswers(answers.filter((answer) => answer.answer_id !== id ))
                 setDotsMenu({state:false,id:''})
@@ -116,6 +133,10 @@ const ViewAnswers = () => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     const links = [
@@ -128,12 +149,15 @@ const ViewAnswers = () => {
     const getMoreAnswers = () => {
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_answers/${id}?answers=${answers.length}`,{
+            fetch(`https://kbbackend.onrender.com/get_answers/${id}?answers=${answers.length}`,{
                 method: 'GET',
                 headers: {'Authorization': `Bearer ${token}`},
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.status === 'ok'){
                     setAnswers([...answers, ...data.answers])
                     setShowLoader(false)
@@ -142,6 +166,10 @@ const ViewAnswers = () => {
                 }
                 console.log('Response from Flask:', data);
             })
+            .catch((error) => {
+                errorToast("No internet connection!")
+                console.error('Error', error);
+            });
         },2000)
     }
 
@@ -165,9 +193,9 @@ const ViewAnswers = () => {
                     </div>
                     <div className="post_profile_and_name">
                         <div className="post_profile">
-                            <img src={userInfo.profile_url}/>
+                            <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                         </div>
-                        {userInfo.username}
+                        {userInfo?userInfo.username:<Navigate to="/login"/>}
                     </div>
                     <div className='question_div_answer'>{openAnswerOverlay.question}</div>
                     <form onSubmit={handleAnswerSubmit}>
@@ -188,18 +216,18 @@ const ViewAnswers = () => {
                     </div>
                     <div className="view_answers_profile_big">
                         <div className="view_answers_profile">
-                            <img src={userInfo.profile_url}/>
+                            <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                         </div>
                     </div>
                     <div className="view_answers_text">
-                        {userInfo.username}, can you answer this question?
+                        {userInfo?userInfo.username:<Navigate to="/login"/>}, can you answer this question?
                     </div>
                     <button id='answer_button' onClick={()=> openAnswer(question.question, question.question_id)}>
                         Answer
                         <img src='/images/answer.png' width="15px" height="15px"/>
                     </button>
                 </div>
-                <InfiniteScroll dataLength={answers.length} next={getMoreAnswers} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>
+                <InfiniteScroll style={{overflow:"unset"}} dataLength={answers.length} next={getMoreAnswers} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>
                     {answers.map((answer) => (
                         <div className="answer_post_div">
                             <div className="profile_and_info">    
@@ -212,7 +240,7 @@ const ViewAnswers = () => {
                                 </div>
                             </div>
                             <div className="actual_post" dangerouslySetInnerHTML={{__html:answer.answer}}></div>
-                            {(userInfo.username === answer.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:answer.answer_id})} className='three_dots_img_1' src="/images/dots.png"/>}
+                            {userInfo?(userInfo.username === answer.username || userInfo.admin) && <img onClick={() => setDotsMenu({state:true,id:answer.answer_id})} className='three_dots_img_1' src="/images/dots.png"/>:<Navigate to="/login"/>}
                             {(dotsmenu.state && dotsmenu.id === answer.answer_id) && <div className="dots_menu" style={{top:'5rem'}}>
                                 <img src="/images/close.png" width="12px" height="12px" onClick={() => setDotsMenu({state:false,id:''})}/>
                                 <div className="dots_menu_13" onClick={() => handleAnswerDelete(dotsmenu.id)}>Delete answer</div>

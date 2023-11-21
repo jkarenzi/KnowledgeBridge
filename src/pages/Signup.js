@@ -5,7 +5,7 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-    const [formData, setFormData] = useState({username:"", password:"", email:""})
+    const [formData, setFormData] = useState({username:"", password:"",confirmPassword:'', email:""})
     const navigate = useNavigate()
 
     const showToast = () => {
@@ -22,7 +22,7 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch('http://localhost:5000/signup',{
+        fetch('https://kbbackend.onrender.com/signup',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(formData)
@@ -67,7 +67,7 @@ const Signup = () => {
                         <label>Password</label>
                     </div>
                     <div class="txt_field">
-                        <input type="password" required/>
+                        <input type="password" onChange={(e) => setFormData({...formData, confirmPassword:e.target.value})} required/>
                         <span></span>
                         <label>Confirm Password</label>
                     </div>

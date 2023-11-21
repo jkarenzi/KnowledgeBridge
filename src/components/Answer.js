@@ -7,13 +7,14 @@ import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShowQuestions from './ShowQuestions';
+import { Navigate } from 'react-router-dom';
 
 
 const Answer = () => {
     const [ userPost, setUserPost ] = useState('')
     const [questions, setQuestions] = useState([])
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    const token = localStorage.getItem('token')
+    const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')))
+    const [token,setToken] = useState(localStorage.getItem('token'))
     const navigate = useNavigate()
     const [ query, setQuery ] = useState('')
     const [ showLoader, setShowLoader ] = useState(false)
@@ -54,13 +55,16 @@ const Answer = () => {
         formData.append('question', openAnswerOverlay.question)
         formData.append('answer', userAnswer)
         formData.append('timestamp',timestamp)
-        fetch('http://localhost:5000/add_answer',{
+        fetch('https://kbbackend.onrender.com/add_answer',{
             method: 'POST',
             body: formData,
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 closeAnswer()
                 showToast(data.message)
@@ -69,16 +73,23 @@ const Answer = () => {
             }
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     }
 
     useEffect(() => {
         setShowLoader(true)
-        fetch('http://localhost:5000/get_questions?&questions=0',{
+        fetch('https://kbbackend.onrender.com/get_questions?&questions=0',{
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`},
         })
         .then((response) => response.json())
         .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
+            }
             if (data.status === 'ok'){
                 setQuestions(data.questions)
             } else {
@@ -87,6 +98,10 @@ const Answer = () => {
             setShowLoader(false)
             console.log('Response from Flask:', data);
         })
+        .catch((error) => {
+            errorToast("No internet connection!")
+            console.error('Error', error);
+        });
     },[])
 
     function closeAnswer() {
@@ -101,12 +116,15 @@ const Answer = () => {
         setMessage('')
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_questions?query=${query}&questions=0`,{
+            fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=0`,{
                 method: 'GET',
                 headers: {'Authorization': `Bearer ${token}`},
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.questions.length === 0) {
                     setMessage('No matches found')
                 } else {
@@ -115,18 +133,25 @@ const Answer = () => {
                 setQuestions(data.questions)
                 setShowLoader(false)
             })
+            .catch((error) => {
+                errorToast("No internet connection!")
+                console.error('Error', error);
+            });
         }, 2000)    
     }
 
     const getMoreQuestions = () => {
         setShowLoader(true)
         setTimeout(() => {
-            fetch(`http://localhost:5000/get_questions?query=${query}&questions=${questions.length}`,{
+            fetch(`https://kbbackend.onrender.com/get_questions?query=${query}&questions=${questions.length}`,{
                 method: 'GET',
                 headers: {'Authorization': `Bearer ${token}`},
             })
             .then((response) => response.json())
             .then((data) => {
+                if(data.code !== 0){
+                    navigate('/login')
+                }
                 if (data.status === 'ok'){
                     setQuestions([...questions, ...data.questions])
                     setShowLoader(false)
@@ -135,6 +160,10 @@ const Answer = () => {
                 }
                 console.log('Response from Flask:', data);
             })
+            .catch((error) => {
+                errorToast("No internet connection!")
+                console.error('Error', error);
+            });
         },2000)
     }
 
@@ -156,9 +185,9 @@ const Answer = () => {
                     </div>
                     <div className="post_profile_and_name">
                         <div className="post_profile">
-                            <img src={userInfo.profile_url}/>
+                            <img src={userInfo?userInfo.profile_url:<Navigate to="/login"/>}/>
                         </div>
-                        {userInfo.username}
+                        {userInfo?userInfo.username:<Navigate to="/login"/>}
                     </div>
                     <div className='question_div_answer'>{openAnswerOverlay.question}</div>
                     <form onSubmit={handleAnswerSubmit}>

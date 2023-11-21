@@ -43,7 +43,7 @@ const Header = (props) => {
             </nav>
             <div className='user_profile_header_99'>
                 <div className = 'user_profile_header'>
-                    <img src={props.userInfo.profile_url} alt="User Profile" onClick={openUser}/>
+                    {props.userInfo?<img src={props.userInfo.profile_url} alt="User Profile" onClick={openUser}/>:<Navigate to='/login'/>}
                 </div>
             </div>
             {openUserOptions && <div className='user_logout'>
