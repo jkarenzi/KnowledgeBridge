@@ -55,7 +55,7 @@ const ViewProfile = () => {
             errorToast("No internet connection!")
             console.error('Error', error);
         });
-    })
+    },[])
 
     return (
         <div className="home_body">
