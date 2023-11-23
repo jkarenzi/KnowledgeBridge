@@ -21,6 +21,7 @@ import ViewAnswers from './components/ViewAnswers';
 import Home from './pages/Home';
 import { useState } from 'react';
 import CustomPage from './pages/CustomPage';
+import ViewProfile from './pages/ViewProfile';
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route path='following' element={<Following/>}/>
           <Route path='answer' element={<Answer/>}/>
         </Route>
+        <Route path='viewProfile/:id' element={token && userInfo?<ViewProfile/>:<Navigate to='/login'/>}/>
         <Route path='settings' element={token && userInfo?<Settings/>:<Navigate to='/login'/>}/>
         <Route path='*' element={<CustomPage/>}/>
       </Route>

@@ -109,7 +109,7 @@ const Users = (props) => {
                             </div>    
                             <div className='user_details'>
                                 <div className='user_details_1'>
-                                    <h4>{user.username}</h4>
+                                    <h4 style={{cursor:'pointer'}} onClick={()=> navigate(`/viewProfile/${user.user_id}`)}>{user.username}</h4>
                                     {user.admin && <img src='/images/admin.png' width="15px" height="15px"/>}
                                 </div>
                                 <h4 id='email_user'>{user.email}</h4>
