@@ -14,6 +14,8 @@ const Admin = () => {
     const [ pdfFiles, setPdfFiles ] = useState(null);
     const [countData, setCountData ] = useState([])
     const [ showLoader, setShowLoader ] = useState(false)
+    const [ uploadLoader, setUploadLoader ] = useState(false)
+
 
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     const token = localStorage.getItem('token')
@@ -63,6 +65,7 @@ const Admin = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setUploadLoader(true)
         const formData = new FormData()
         formData.append('category', category)
         formData.append('level', level)
@@ -80,6 +83,7 @@ const Admin = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setUploadLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -91,6 +95,7 @@ const Admin = () => {
             console.log(data)
         })
         .catch((error) => {
+            setUploadLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -169,6 +174,7 @@ const Admin = () => {
                                 </div>
                             </div>
                             <button type="submit" id='submit_pdf'>Upload</button>
+                            {uploadLoader && <ThreeDotsLoader/>}
                         </form>
                     </div>
                 </div> 
