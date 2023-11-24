@@ -7,6 +7,15 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
     const [formData, setFormData] = useState({username:"", password:"",confirmPassword:'', email:""})
     const navigate = useNavigate()
+    const [ signupLoader, setSignupLoader ] = useState(false)
+
+    const ThreeDotsLoader = () => (
+        <div className="loader">
+        <div className="dot dot1"></div>
+        <div className="dot dot2"></div>
+        <div className="dot dot3"></div>
+        </div>
+    );
 
     const showToast = () => {
         toast.success('Sign up successful!', {
@@ -22,6 +31,7 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setSignupLoader(true)
         fetch('https://kbbackend.onrender.com/signup',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -29,6 +39,7 @@ const Signup = () => {
         })    
         .then((response) => response.json())
         .then((data) => {
+            setSignupLoader(false)
             if (data.status === 'ok') {
                 navigate('/login')
                 showToast()
@@ -38,6 +49,7 @@ const Signup = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setSignupLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -73,6 +85,7 @@ const Signup = () => {
                     </div>
                     <button type='submit' className='login_button'>Signup</button>
                     <div class="signup_link">Already a member?<Link to="/login" className = 'signup'>Login</Link></div>
+                    {signupLoader && <ThreeDotsLoader/>}
                 </form>
             </div>
         </body>   
