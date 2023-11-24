@@ -147,9 +147,10 @@ const Admin = () => {
                                     <option value="Computer science">Computer science</option>
                                     <option value="Childrens' books">Childrens' books</option>
                                     <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
                                     <option value="Arts">Arts</option>
-                                    <option value="Art">Music</option>
-                                    <option value="Art">Religion</option>
+                                    <option value="Music">Music</option>
+                                    <option value="Religion">Religion</option>
                                 </select>
                                 <label>Level of Education</label>
                                 <select id="levels" onChange={(e) => setLevel(e.target.value)} required>
