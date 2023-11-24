@@ -43,6 +43,11 @@ const ForgotPassword = () => {
 
     return (
         <body class="forgot_body">
+            <header className="home_header">
+                <div className='kb_logo' style={{color:'black'}}>
+                    Knowledge<span id="kb_logo" style={{color:'white'}}>Bridge</span>
+                </div>
+            </header>
             <form className="forgot_form" onSubmit={handleSubmit}>
                 <label>Enter the email address associated with this account</label>
                 <input type="email" required onChange={(e)=>{setEmail({email: e.target.value})}}/>
