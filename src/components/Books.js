@@ -50,17 +50,27 @@ const Books = (props) => {
     }
 
     const Download = (id,pdf) => {
-        fetch(`https://kbbackend.onrender.com/download/${id}?id=${userInfo.user_id}`,{
-            method: 'GET',
+        const formData = new FormData()
+        formData.append('id', userInfo.user_id)
+        fetch('https://kbbackend.onrender.com/get_permissions',{
+            method: 'POST',
+            body: formData,
             headers: {'Authorization': `Bearer ${token}`}
         })
-        .then((response) => {
-            if(!response.ok){
-                props.setDownload({state:true,pdf:pdf})
-            }else{
-                window.open(`https://kbbackend.onrender.com/download/${id}?id=${userInfo.user_id}`);
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.code !== 0){
+                navigate('/login')
             }
-        })   
+            if(data.status === 'ok'){
+                console.log(data)
+                if(data.permissions.download_book){
+                    window.open(`http://localhost:5000/download/${id}?user_id=${userInfo.user_id}`);
+                }else{
+                    props.setDownload({state:true,pdf:pdf})
+                }
+            }
+        })
         .catch((error) => {
             errorToast("No internet connection!")
             console.error('Error', error);
