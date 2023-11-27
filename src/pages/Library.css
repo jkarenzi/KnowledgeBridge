@@ -181,6 +181,15 @@
     align-items: center;
     margin: 20px 0;
 }
+
+.do {
+    width: 8px;
+    height: 8px;
+    background-color: #333;
+    border-radius: 50%;
+    margin: 0 3px;
+    animation: bounce 1s infinite;
+}
   
 .dot {
     width: 12px;
