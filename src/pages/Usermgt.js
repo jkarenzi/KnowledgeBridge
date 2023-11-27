@@ -52,6 +52,13 @@ const Usermgt = () => {
         </div>
     );
 
+    useEffect(() => {
+        if(!userInfo.admin){
+            navigate('/library')
+            errorToast("Access Denied")
+        }
+    },[])
+
     function close () {
         setAddMailOverlay({state:false,user_id:'',email:''})
     }

@@ -21,6 +21,13 @@ const ViewProfile = () => {
         });
     };
 
+    useEffect(() => {
+        if(!userInfo.admin){
+            navigate('/library')
+            errorToast("Access Denied")
+        }
+    },[])
+
     const errorToast = (msg) => {
         toast.error(msg, {
           position: toast.POSITION.TOP_RIGHT, // Set the position

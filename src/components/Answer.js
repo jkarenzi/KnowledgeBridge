@@ -30,6 +30,8 @@ const Answer = () => {
         <div className="dot dot3"></div>
         </div>
     );
+
+    const [postLoader, setPostLoader] = useState(false)
  
 
     const showToast = (msg) => {
@@ -46,6 +48,7 @@ const Answer = () => {
 
     function handleAnswerSubmit (e) {
         e.preventDefault()
+        setPostLoader(true)
         const formData = new FormData()
         const currentUTC = new Date();
         currentUTC.setUTCHours(currentUTC.getUTCHours() + 2);
@@ -62,6 +65,7 @@ const Answer = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setPostLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -74,6 +78,7 @@ const Answer = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setPostLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -195,6 +200,7 @@ const Answer = () => {
                         />
                         <button id="post_answer" type="submit">Submit</button>
                     </form>
+                    {postLoader && <ThreeDotsLoader/>}
                 </div>
             </div>}
             <div className='all_questions'>

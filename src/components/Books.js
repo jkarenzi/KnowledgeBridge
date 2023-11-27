@@ -10,6 +10,17 @@ const Books = (props) => {
     const token = props.token
     const userInfo = props.userInfo
 
+    const [bookLoader, setBookLoader] = useState(false)
+
+     // Define a CSS loader for the Three Dots animation
+    const ThreeDotsLoader = () => (
+        <div className="loader">
+        <div className="dot dot1"></div>
+        <div className="dot dot2"></div>
+        <div className="dot dot3"></div>
+        </div>
+    );
+
     const showToast = (msg) => {
         toast.success(msg, {
           position: toast.POSITION.TOP_RIGHT, // Set the position
@@ -23,6 +34,7 @@ const Books = (props) => {
     };
 
     const showBook = (id,pdf) => {
+        setBookLoader({state:true,id:id})
         const formData = new FormData()
         formData.append('id', userInfo.user_id)
         fetch('https://kbbackend.onrender.com/get_permissions',{
@@ -32,6 +44,7 @@ const Books = (props) => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setBookLoader({state:false,id:''})
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -44,12 +57,14 @@ const Books = (props) => {
             }
         })
         .catch((error) => {
+            setBookLoader({state:false,id:''})
             errorToast("No internet connection!")
             console.error('Error', error);
         });
     }
 
     const Download = (id,pdf) => {
+        setBookLoader({state:true,id:id})
         const formData = new FormData()
         formData.append('id', userInfo.user_id)
         fetch('https://kbbackend.onrender.com/get_permissions',{
@@ -59,19 +74,21 @@ const Books = (props) => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setBookLoader({state:false,id:''})
             if(data.code !== 0){
                 navigate('/login')
             }
             if(data.status === 'ok'){
                 console.log(data)
                 if(data.permissions.download_book){
-                    window.open(`http://localhost:5000/download/${id}?user_id=${userInfo.user_id}`);
+                    window.open(`https://kbbackend.onrender.com/download/${id}?user_id=${userInfo.user_id}`);
                 }else{
                     props.setDownload({state:true,pdf:pdf})
                 }
             }
         })
         .catch((error) => {
+            setBookLoader({state:false,id:''})
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -96,6 +113,7 @@ const Books = (props) => {
                         <div className='book_name'>
                             <img src="/images/pdf_image.jpeg" width='20px' height='25px'/>
                             { book.filename}
+                            {(bookLoader.state && bookLoader.id === book.file_id) && <ThreeDotsLoader/>}
                         </div>
                         <div className='book_options'>
                             <img src='/images/book.png' onClick={()=>{showBook(book.file_id,book.filename)}}/>

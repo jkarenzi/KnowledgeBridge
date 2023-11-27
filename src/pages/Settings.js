@@ -24,6 +24,16 @@ const Settings = () => {
     const [ emailOverlay, setEmailOverlay ] = useState(false)
     const [ aPassword, setAPassword ] = useState('')
     const [ newEmail, setNewEmail ] = useState('')
+    const [loader, setLoader] = useState(false)
+
+     // Define a CSS loader for the Three Dots animation
+    const ThreeDotsLoader = () => (
+        <div className="loader" style={{alignSelf:'center'}}>
+        <div className="dot dot1"></div>
+        <div className="dot dot2"></div>
+        <div className="dot dot3"></div>
+        </div>
+    );
 
     
 
@@ -119,6 +129,7 @@ const Settings = () => {
 
     const handleEmailChange = (e) => {
         e.preventDefault()
+        setLoader(true)
         const formData = new FormData()
         formData.append('password', aPassword)
         formData.append('username', userInfo.username)
@@ -133,6 +144,7 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -146,6 +158,7 @@ const Settings = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -153,6 +166,7 @@ const Settings = () => {
 
     const handleUsernameChange = (e) => {
         e.preventDefault()
+        setLoader(true)
         const formData = new FormData()
         formData.append('password', password)
         formData.append('old_username', userInfo.username)
@@ -167,6 +181,7 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -180,6 +195,7 @@ const Settings = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -187,6 +203,7 @@ const Settings = () => {
 
     const handlePasswordChange = (e) => {
         e.preventDefault()
+        setLoader(true)
         const formData = new FormData()
         formData.append('old_password', oldPassword)
         formData.append('new_password', newPassword)
@@ -203,7 +220,8 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
-            if(data.code !== 0){
+            setLoader(false)
+            if(data.code !== 0){   
                 navigate('/login')
             }
             if (data.status === 'ok'){
@@ -215,6 +233,7 @@ const Settings = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -222,6 +241,7 @@ const Settings = () => {
 
     const handleChangeProfile = (e) => {
         e.preventDefault()
+        setLoader(true)
         const formData = new FormData()
         formData.append('profile_picture', profile)
         formData.append('user', userInfo.username)
@@ -234,6 +254,7 @@ const Settings = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -247,6 +268,7 @@ const Settings = () => {
             }
         })
         .catch((error) => {
+            setLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -315,6 +337,7 @@ const Settings = () => {
                             <input type="text" onChange={(e)=> {setNewUsername(e.target.value)}} required/>   
                         </div>
                         <button type="submit">Submit</button>
+                        {loader && <ThreeDotsLoader/>}
                     </form>
                 </div>
             </div>}
@@ -339,6 +362,7 @@ const Settings = () => {
                             <input type="password" onChange={(e)=> {setConfirmPassword(e.target.value)}} required/>   
                         </div>
                         <button type="submit">Submit</button>
+                        {loader && <ThreeDotsLoader/>}
                     </form>
                 </div>
             </div>}
@@ -357,6 +381,7 @@ const Settings = () => {
                             {previewImage && <img src={previewImage} style={{objectFit:'cover'}} alt="Preview" width="200px" height="150px"/>}
                         </div> 
                         <button type="submit">Upload</button> 
+                        {loader && <ThreeDotsLoader/>}
                     </form>
                 </div>
             </div>}
@@ -377,6 +402,7 @@ const Settings = () => {
                             <input type="email" onChange={(e)=> {setNewEmail(e.target.value)}} required/>   
                         </div>
                         <button type="submit">Submit</button>
+                        {loader && <ThreeDotsLoader/>}
                     </form>
                 </div>
             </div>}

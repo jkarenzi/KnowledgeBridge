@@ -30,6 +30,7 @@ const ViewAnswers = () => {
         </div>
     );
 
+    const [postLoader, setPostLoader] = useState(false)
 
     function closeAnswer() {
         setOpenAnswerOverlay({state:false, question:'', question_id:''})
@@ -79,6 +80,7 @@ const ViewAnswers = () => {
 
     function handleAnswerSubmit (e) {
         e.preventDefault()
+        setPostLoader(true)
         const formData = new FormData()
 
         const currentUTC = new Date();
@@ -97,6 +99,7 @@ const ViewAnswers = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setPostLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -109,6 +112,7 @@ const ViewAnswers = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setPostLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -207,6 +211,7 @@ const ViewAnswers = () => {
                         />
                         <button id="post_answer" type="submit">Submit</button>
                     </form>
+                    {postLoader && <ThreeDotsLoader/>}
                 </div>
             </div>}
             <div className="community_big">

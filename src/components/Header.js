@@ -10,6 +10,7 @@ const Header = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
     const [openUserOptions, setOpenUserOptions ] = useState(false);
+    const [newLinks, setNewLinks] = useState([])
 
     const showToast = () => {
         toast.success('Successfully logged out', {
@@ -28,13 +29,22 @@ const Header = (props) => {
         setOpenUserOptions(!openUserOptions)
     }
 
+    useEffect(() => {
+        if(!props.userInfo.admin) {
+            setNewLinks(links.filter((link) => link.text !== 'Admin'))
+            console.log(newLinks)
+        }else{
+            setNewLinks(links)
+        }
+    },[])
+
     return (
         <header>
             <div className='kb_logo'>
                 Knowledge<span id="kb_logo">Bridge</span>
             </div>
             <nav>
-                {links.map((nav_link) => (
+                {newLinks.map((nav_link) => (
                     <div className='nav_link_div' id={nav_link.id} style={{borderBottom: (location.pathname === nav_link.url || location.pathname === '/user_mgt' && nav_link.text === 'Admin')?'4px solid #FF8400':'none'}}>
                         <img src={nav_link.icon} width="30px" height="30px"/>
                         <Link to={nav_link.url}>{nav_link.text}</Link>

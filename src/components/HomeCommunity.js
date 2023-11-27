@@ -22,6 +22,8 @@ const HomeCommunity = () => {
     const [ showLoader, setShowLoader ] = useState(false)
     const [ message, setMessage ] = useState('')
     const navigate = useNavigate()
+    const[postLoader, setPostLoader] = useState(false)
+    const[askLoader, setAskLoader] = useState(false)
 
      // Define a CSS loader for the Three Dots animation
     const ThreeDotsLoader = () => (
@@ -72,6 +74,7 @@ const HomeCommunity = () => {
 
     const handleAddSubmit = (e) => {
         e.preventDefault()
+        setAskLoader(true)
         const currentUTC = new Date();
         currentUTC.setUTCHours(currentUTC.getUTCHours() + 2);
         const timestamp = currentUTC.toISOString();
@@ -89,6 +92,7 @@ const HomeCommunity = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setAskLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -101,6 +105,7 @@ const HomeCommunity = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setAskLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -108,6 +113,7 @@ const HomeCommunity = () => {
 
     const handlePostSubmit = (e) => {
         e.preventDefault()
+        setPostLoader(true)
         const currentUTC = new Date();
         currentUTC.setUTCHours(currentUTC.getUTCHours() + 2);
         const timestamp = currentUTC.toISOString();
@@ -124,6 +130,7 @@ const HomeCommunity = () => {
         })
         .then((response) => response.json())
         .then((data) => {
+            setPostLoader(false)
             if(data.code !== 0){
                 navigate('/login')
             }
@@ -136,6 +143,7 @@ const HomeCommunity = () => {
             console.log('Response from Flask:', data);
         })
         .catch((error) => {
+            setPostLoader(false)
             errorToast("No internet connection!")
             console.error('Error', error);
         });
@@ -280,6 +288,7 @@ const HomeCommunity = () => {
                         <input type="text" placeholder='Start your question with "What","How", "Why" etc' onChange={(e)=>{setQuestion(e.target.value)}}/>
                         <button type="submit">Add question</button>
                     </form>}
+                    {askLoader && <ThreeDotsLoader/>}
                     {showPost && <form id="post_form" onSubmit={handlePostSubmit}>
                         <div className="post_profile_and_name">
                             <div className="post_profile">
@@ -295,6 +304,7 @@ const HomeCommunity = () => {
                         />
                         <button id="post_form_btn" type="submit">Create post</button>
                     </form>}
+                    {postLoader && <ThreeDotsLoader/>}
                 </div>
             </div>}
             <InfiniteScroll style={{overflow:"unset"}} dataLength={posts.length} next={getMorePosts} hasMore={true} loader={showLoader?<ThreeDotsLoader/>:null}>

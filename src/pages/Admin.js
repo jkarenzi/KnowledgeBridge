@@ -42,6 +42,13 @@ const Admin = () => {
     };
 
     useEffect(() => {
+        if(!userInfo.admin){
+            navigate('/library')
+            errorToast("Access Denied")
+        }
+    },[])
+
+    useEffect(() => {
         setShowLoader(true)
         fetch('https://kbbackend.onrender.com/get_info_books',{
             method: 'GET',
