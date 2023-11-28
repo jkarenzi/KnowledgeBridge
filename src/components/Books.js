@@ -81,7 +81,7 @@ const Books = (props) => {
             if(data.status === 'ok'){
                 console.log(data)
                 if(data.permissions.download_book){
-                    window.open(`http://localhost:5000/download/${id}?user_id=${userInfo.user_id}`);
+                    window.open(`https://kbbackend.onrender.com/download/${id}?user_id=${userInfo.user_id}`);
                 }else{
                     props.setDownload({state:true,pdf:pdf})
                 }
