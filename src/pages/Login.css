@@ -133,8 +133,9 @@ form .txt_field{
 }
 
 #signInDiv {
-    width: 15rem;
-    margin-left: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .or {
