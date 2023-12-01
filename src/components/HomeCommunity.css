@@ -449,3 +449,33 @@
     background-color: #e0e0e0;
 }
 
+@media (max-width: 768px) {
+    .create_post{
+        width: 24rem;
+    }
+    .create_post_1 button{
+        width: 18rem;
+    }
+    .post_or_ask{
+        width: 23rem;
+    }
+    .user_post_div{
+        width: 24rem;
+    }
+    .create_comment input{
+        width: 5rem;
+    }
+    .user_post_actions{
+        width: 85%;
+    }
+    .ind_comment{
+        width: 24rem;
+    }
+    .get_more_comments{
+        width: 22rem;
+    }
+    #post_form_btn{
+        margin-top: 5rem;
+    }
+    
+}

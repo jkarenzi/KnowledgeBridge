@@ -691,4 +691,74 @@ animation-delay: 0s;
     border: none;
 }
 
+@media (max-width: 768px) {
+    #search-form{
+        width: 21rem;
+    }
+    #search-input{
+        width: 16rem;
+    }
+    .search_div h3 {
+        font-size: larger;
+    }
+    .category_container{
+        display: none;
+    }
+    .big-book_container{
+        justify-content: center;
+        min-height: 75vh;
+    }
+    .book_and_sort{
+        width: 90%;
+        margin:0;
+    }
+    .book{
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .book_options{
+        align-self: flex-end;
+    }
+    .delete_overlay{
+        width: 23rem;
+    }
+    .user_mgt_intro h3{
+        font-size: larger;
+    }
+    .user_mgt_intro h4{
+        font-size: large;
+    }
+    .search_mgt_div{
+        flex-direction: column;
+        padding: 0;
+        gap: 2rem;
+    }
+    .search_mgt_div button{
+        align-self: flex-start;
+    }
+    #search-mgt-form{
+        width: 87%;
+    }
+    .user{
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .user_name{
+        align-self: flex-start;
+    }
+    .options_mgt{
+        align-self: flex-end;
+    }
+    .privileges_overlay{
+        width: 23rem;
+    }
+    .profile_dets_email,.profile_dets{
+        width: 20rem;
+    }
+}
+
 

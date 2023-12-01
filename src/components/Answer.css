@@ -143,3 +143,16 @@
 mark {
     background-color: #ff8b0f;
 }
+
+@media (max-width: 768px) {
+    .all_questions{
+        width: 24rem;
+    }
+    .answer_container{
+        width: 23rem;
+    }
+    .react_quill_editor_1 {
+        width: 21rem;
+        margin-bottom: 1rem;
+    }
+}

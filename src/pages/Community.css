@@ -56,3 +56,22 @@
     height: 2.4rem;
     outline: none;
 }
+
+#mobile_search {
+    margin-right: 2rem;
+    display: none;
+}
+
+#mobile_back {
+    margin-left: 1rem;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #mobile_search{
+        display: flex;
+    }
+    .community_search_bar{
+        display: none;
+    }
+}

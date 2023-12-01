@@ -10,68 +10,41 @@
     font-weight: 500;
 }
 
-.add-big_container {
-    display: flex;
-    padding-left: 2rem;
-}
-
-.add_container {
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    border: 1px solid lightgray;
-    width: 25rem;
-    height: 30rem;
-}
-
-.add_book {
-    font-size: x-large;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-weight: 500;
-    background-color: #126f9a;
-    color: white;
-    height: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
 .category {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    height: 15rem;
     gap: 1rem;
     margin-left: 1rem;
+    margin-bottom: 2rem;
 }
 
 .category, .upload_pdf label {
     font-weight: 500;
-    font-size: large;
+    font-size: medium;
 }
 
 .upload_pdf {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    height: 5rem;
+    height: 4rem;
     gap: 1rem;
     margin-left: 1rem;
 }
 
 #category {
-    width: 10rem;
-    height: 2.5rem;
-    font-size: medium;
+    width: 8rem;
+    height: 2rem;
+    font-size: small;
     border-radius: 6px;
     margin-bottom: 1rem;
 }
 
 #levels{
-    width: 10rem;
-    height: 2.5rem;
-    font-size: medium;
+    width: 8rem;
+    height: 2rem;
+    font-size: small;
     border-radius: 6px;
 }
 
@@ -82,8 +55,8 @@
     border: none;
     height: 2.5rem;
     width: 8rem;
-    font-size: large;
-    margin-top: 1rem;
+    font-size: medium;
+    margin-top: 2rem;
 }
 
 .admin_header {
@@ -115,9 +88,40 @@
 .category_count {
     display: flex;
     flex-wrap: wrap;
-    width: 30rem;
-    height: 15rem;
+    width: 90%;
+    padding-left: 2rem;
+    padding-right: 2rem;
     gap: 1rem;
+}
+
+.add_book_btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lightgray;
+    background-color: #126f9a;
+    color: white;
+    width: 7rem;
+    height: 2.5rem;
+    border-radius: 20px;
+    margin-left: 2rem;
+    cursor: pointer;
+}
+
+.add_book_overlay {
+    background-color: white;
+    width: 23rem;
+    height: 28rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add_book_overlay form {
+    width: 90%;
+    margin-top: 1rem;
 }
 
 .count_22 {
@@ -154,4 +158,16 @@
 .admin_desc h3 {
     font-size: larger;
     font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    #cmp{
+        font-size: large;
+    }
+    #cmp1{
+        font-size: large;
+    }
+    .count_22 h4 {
+        font-size: medium;
+    }
 }

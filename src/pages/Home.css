@@ -4,6 +4,20 @@
     min-height: 100vh;
 }
 
+.kb_logo_1{
+    margin-left: 2rem;
+    font-size: larger;
+    font-weight: 800;
+    color: black;
+}
+
+#kb_logo_1 {
+    background-color: rgb(255, 132, 0);
+    padding: 0.5rem;
+    border-radius: 6px;
+    margin-left: 0.2rem;
+    color:white;
+}
 
 .home_header {
     display: flex;
@@ -96,4 +110,76 @@
 .home_header_signup:hover,.kb_home_who a:hover {
     background-color: #da7000;
     cursor: pointer;
+}
+
+#home_cont_2_img{
+    margin-left: 2rem;
+}
+
+#home_cont_2_img_1{
+    margin-right: 2rem;
+}
+
+.header_right{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    margin-right:2rem;
+}
+
+@media (max-width: 768px) {
+    .kb_logo_1{
+        font-size: small;
+        margin-left: 1rem;
+    }
+    .header_right{
+        margin-right: 1rem;
+    }
+    
+    .home_container_1{
+        flex-direction: column;
+        align-items: center;
+        margin-top: 3rem;
+        height:fit-content;
+        gap: 2rem;
+    }
+    .kb_home_who{
+        width: 85%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .kb_home_who h1{
+        font-size: x-large;
+    }
+    .kb_home_who p{
+        font-size: medium;
+    }
+    .kb_home_who a{
+        margin-top: 2rem;
+    }
+    .home_container_1 img{
+        width: 300px;
+        height: 250px;
+    }
+    .home_container_2{
+        flex-direction: column-reverse;
+        height:fit-content;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .home_container_2:last-of-type{
+        flex-direction: column;
+        height:fit-content;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    #home_cont_2_img,#home_cont_2_img_1{
+        width: 300px;
+        height: 200px;
+        margin-left:0;
+        margin-right: 0;
+    }
 }

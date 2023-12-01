@@ -144,3 +144,12 @@ form .txt_field{
     align-items: center;
     margin-bottom: 1rem;
 }
+
+@media (max-width: 768px) {
+    .bg-image {
+      display: none;
+    }
+    .center {
+      width: 100%;
+    }
+}

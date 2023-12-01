@@ -279,3 +279,22 @@
     align-items: center;
     gap: 1rem;
 }
+
+@media (max-width: 768px) {
+    .big_div_container{
+        flex-direction: column;
+        align-items: center;
+    }
+    .settings_intro{
+        width: 85%;
+    }
+    .big_profile_picture_details_1{
+        width: 22.3rem;
+        height: 10.3rem;
+    }
+    .big_profile_picture_details{
+        width: 22rem;
+        height: 10rem;
+
+    }
+}

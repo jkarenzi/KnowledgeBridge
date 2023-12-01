@@ -5,10 +5,10 @@ const Home = () => {
     return (
         <body className='home_body'>
             <header className='home_header'>
-                <div className='kb_logo' style={{color:'black'}}>
-                    Knowledge<span id="kb_logo" style={{color:'white'}}>Bridge</span>
+                <div className='kb_logo_1'>
+                    Knowledge<span id="kb_logo_1">Bridge</span>
                 </div>
-                <div style={{display:'flex', alignItems:'center',gap:'1rem',marginRight:'2rem'}}>
+                <div className="header_right">
                     <Link to='/login'>login</Link>
                     <Link to='/signup' className='home_header_signup'>Sign Up</Link>
                 </div>
@@ -26,7 +26,7 @@ const Home = () => {
                 <img src='/images/many-books.png' width="550px" height="490px"/>
             </div>
             <div className='home_container_2'>
-                <img src='/images/library-home.png' width="650px" height="350px" style={{marginLeft:'2rem'}}/>   
+                <img src='/images/library-home.png' id="home_cont_2_img" width="650px" height="350px"/>   
                 <div className='kb_home_who'>
                     <h1>Our library</h1>
                     <p>
@@ -48,7 +48,7 @@ const Home = () => {
                         ask questions, and celebrate milestones.
                     </p>
                 </div>
-                <img src='/images/community-home.png' width="650px" height="350px" style={{marginRight:'2rem'}}/>
+                <img id="home_cont_2_img_1" src='/images/community-home.png' width="650px" height="350px"/>
             </div>
         </body>
     );

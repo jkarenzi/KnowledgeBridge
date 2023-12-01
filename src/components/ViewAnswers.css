@@ -65,3 +65,12 @@
     border-radius: 6px;
     margin-top: 0.5rem;
 }
+
+@media (max-width: 768px) {
+    .view_answers_intro{
+        width: 24rem;
+    }
+    .answer_post_div{
+        width: 24rem;
+    }
+}

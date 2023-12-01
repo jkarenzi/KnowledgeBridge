@@ -15,6 +15,7 @@ const Admin = () => {
     const [countData, setCountData ] = useState([])
     const [ showLoader, setShowLoader ] = useState(false)
     const [ uploadLoader, setUploadLoader ] = useState(false)
+    const [ openAddBookOverlay, setOpenAddBookOverlay ] = useState(false)
 
 
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -134,11 +135,8 @@ const Admin = () => {
                 </div>
             </div>
             <h3 id='cmp'>Content Management Portal</h3>
-            <div className='admin_desc'>
-                <h3>1. Categories</h3>
-                <h3>2. Add a book</h3>
-            </div>  
-            <div className='content_mgt_container'>
+            <h1 id='cmp1' style={{textAlign:'left',marginLeft:'2rem',fontWeight:500}}>Categories</h1> 
+            <div style={{minHeight:'8rem',marginBottom:'2rem'}}>
                 {showLoader?<ThreeDotsLoader/>:
                 <div className='category_count'>
                     {countData.map((category) => (
@@ -148,45 +146,48 @@ const Admin = () => {
                         </div>    
                     ))}
                 </div>}
-                <div className='add-big_container'>
-                    <div className='add_container'>
-                        <div className='add_book'>Add book resource</div>
-                        <form onSubmit={handleSubmit}>
-                            <div className='category'>
-                                <label>Category</label>
-                                <select id="category" onChange={(e) => setCategory(e.target.value)} required>
-                                    <option value="" disabled selected>Select Category</option>
-                                    <option value="Computer science">Computer science</option>
-                                    <option value="Childrens' books">Childrens' books</option>
-                                    <option value="Physics">Physics</option>
-                                    <option value="Chemistry">Chemistry</option>
-                                    <option value="Arts">Arts</option>
-                                    <option value="Music">Music</option>
-                                    <option value="Religion">Religion</option>
-                                </select>
-                                <label>Level of Education</label>
-                                <select id="levels" onChange={(e) => setLevel(e.target.value)} required>
-                                    <option value="" disabled selected>Select Level</option>
-                                    <option value="Undergraduate">Undergraduate</option>
-                                    <option value="A'Level">A'Level</option>
-                                    <option value="O'Level">O'Level</option>
-                                    <option value="Primary">Primary</option>
-                                </select>
-                            </div>
-                            <div className='upload_pdf'>
-                                <label>Upload book(s)</label>
-                                <div className='upload_input'>
-                                    <input type="file" id="upload_pdf" accept=".pdf" onChange={(e) => setPdfFiles(e.target.files)} multiple required/>
-                                    <img src="/images/close.png" width="10px" height="10px" onClick={clearFile}/>
-                                </div>
-                            </div>
-                            <button type="submit" id='submit_pdf'>Upload</button>
-                            {uploadLoader && <ThreeDotsLoader/>}
-                        </form>
-                    </div>
-                </div> 
             </div>
-            
+            <button onClick={() => {document.body.style.overflow='hidden';setOpenAddBookOverlay(true)}} className='add_book_btn'>Add book</button>
+            {openAddBookOverlay && <div className="change_username_big">
+                <div className="add_book_overlay">
+                    <div id="title_101">
+                        <h4 style={{fontSize:'large'}}>Add a book</h4>
+                        <img src="/images/close.png" width="20px" height="20px" style={{cursor: 'pointer'}} onClick={() => {document.body.style.overflow='auto';setOpenAddBookOverlay(false)}}/> 
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className='category'>
+                            <label>Category</label>
+                            <select id="category" onChange={(e) => setCategory(e.target.value)} required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Computer science">Computer science</option>
+                                <option value="Childrens' books">Childrens' books</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Music">Music</option>
+                                <option value="Religion">Religion</option>
+                            </select>
+                            <label>Level of Education</label>
+                            <select id="levels" onChange={(e) => setLevel(e.target.value)} required>
+                                <option value="" disabled selected>Select Level</option>
+                                <option value="Undergraduate">Undergraduate</option>
+                                <option value="A'Level">A'Level</option>
+                                <option value="O'Level">O'Level</option>
+                                <option value="Primary">Primary</option>
+                            </select>
+                        </div>
+                        <div className='upload_pdf'>
+                            <label>Upload book(s)</label>
+                            <div className='upload_input'>
+                                <input type="file" id="upload_pdf" accept=".pdf" onChange={(e) => setPdfFiles(e.target.files)} multiple required/>
+                                <img src="/images/close.png" width="10px" height="10px" onClick={clearFile}/>
+                            </div>
+                        </div>
+                        <button type="submit" id='submit_pdf'>Upload</button>
+                        {uploadLoader && <ThreeDotsLoader/>}
+                    </form>
+                </div>
+            </div>}
         </body>
     );
 }
