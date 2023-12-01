@@ -722,7 +722,7 @@ animation-delay: 0s;
         align-self: flex-end;
     }
     .delete_overlay{
-        width: 23rem;
+        width: 90%;
     }
     .user_mgt_intro h3{
         font-size: larger;
@@ -754,10 +754,10 @@ animation-delay: 0s;
         align-self: flex-end;
     }
     .privileges_overlay{
-        width: 23rem;
+        width: 90%;;
     }
     .profile_dets_email,.profile_dets{
-        width: 20rem;
+        width: 90%;
     }
 }
 

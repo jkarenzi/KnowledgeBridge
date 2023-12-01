@@ -3,7 +3,7 @@
 .settings_body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .big_profile_picture {
@@ -289,12 +289,19 @@
         width: 85%;
     }
     .big_profile_picture_details_1{
-        width: 22.3rem;
+        width: 85%;
         height: 10.3rem;
     }
     .big_profile_picture_details{
-        width: 22rem;
+        width: 99%;
         height: 10rem;
-
+    }
+    .change_password,.change_username,.change_profile_set{
+        width: 90%;
+    }
+    .big_div_container{
+        width: 100%;
+        gap: 2rem;
+        margin-bottom: 3rem;
     }
 }
