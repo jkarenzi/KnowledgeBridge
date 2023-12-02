@@ -20,7 +20,7 @@ const ForgotPassword = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch('http://localhost:5000/forgot_password',{
+        fetch('https://kbbackend.onrender.com/forgot_password',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(email)
@@ -44,8 +44,8 @@ const ForgotPassword = () => {
     return (
         <body class="forgot_body">
             <header className="home_header">
-                <div className='kb_logo' style={{color:'black'}}>
-                    Knowledge<span id="kb_logo" style={{color:'white'}}>Bridge</span>
+                <div className='kb_logo_1'>
+                    Knowledge<span id="kb_logo_1">Bridge</span>
                 </div>
             </header>
             <form className="forgot_form" onSubmit={handleSubmit}>
