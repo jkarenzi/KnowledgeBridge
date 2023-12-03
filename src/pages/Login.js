@@ -72,6 +72,7 @@ const Login = () => {
                 {theme: 'outline', size: 'large'}
             );
             
+            console.log("hi")
             google.accounts.id.prompt(); 
         } catch(err) {
             window.location.reload()
