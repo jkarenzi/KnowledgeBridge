@@ -63,7 +63,7 @@ const Login = () => {
         try {
             const google = window.google;
             google.accounts.id.initialize({
-                client_id: "582051729507-iabd2a7mfi5abvncgh15ih436o0e50ku.apps.googleusercontent.com",
+                client_id: process.env.REACT_APP_CLIENT_ID,
                 callback: handleCallbackResponse
             })
 
@@ -71,7 +71,7 @@ const Login = () => {
                 document.getElementById('signInDiv'),
                 {theme: 'outline', size: 'large'}
             );
-        
+            
             google.accounts.id.prompt(); 
         } catch(err) {
             window.location.reload()
