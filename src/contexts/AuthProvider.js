@@ -16,13 +16,11 @@ const authReducer = (state, action) => {
 }
  
 export const AuthProvider = ({children}) => {
-
-    const AuthData = {
-        token: null,
-        userInfo: null
-    }
-
-    const [authData, dispatch ] = useReducer(authReducer, AuthData)
+    
+    const [authData, dispatch ] = useReducer(authReducer, {
+        token: localStorage.getItem('token'),
+        userInfo: JSON.parse(localStorage.getItem('userInfo'))
+    })
 
     console.log(authData)
 

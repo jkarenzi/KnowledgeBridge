@@ -1,7 +1,9 @@
 import './Home.css'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+    const navigate = useNavigate()
     return (
         <body className='home_body'>
             <header className='home_header'>
@@ -9,8 +11,8 @@ const Home = () => {
                     Knowledge<span id="kb_logo_1">Bridge</span>
                 </div>
                 <div className="header_right">
-                    <Link to='/login'>login</Link>
-                    <Link to='/signup' className='home_header_signup'>Sign Up</Link>
+                    <Link to="/login">login</Link>
+                    <Link to="signup" className='home_header_signup'>Sign Up</Link>
                 </div>
             </header>
             <div className='home_container_1'>

@@ -22,12 +22,12 @@ import Home from './pages/Home';
 import { useState } from 'react';
 import CustomPage from './pages/CustomPage';
 import ViewProfile from './pages/ViewProfile';
+import { AuthContext } from './contexts/AuthProvider';
+import { useContext } from 'react';
 
 
 function App() {
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')))
-  const [token,setToken] = useState(localStorage.getItem('token'))
-  console.log(token)
+  const {token, userInfo} = useContext(AuthContext)
 
   const router = createBrowserRouter(
     createRoutesFromElements(

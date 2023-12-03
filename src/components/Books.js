@@ -118,7 +118,7 @@ const Books = (props) => {
                         <div className='book_options'>
                             <img src='/images/book.png' onClick={()=>{showBook(book.file_id,book.filename)}}/>
                             <img src='/images/download.png' onClick={() => Download(book.file_id,book.filename)}/>
-                            {userInfo?userInfo.admin && <img src='/images/delete.png' onClick={()=> {openDeleteOverlay(book.file_id, book.filename)}}/>:<Navigate to="/login"/>}   
+                            {userInfo?(userInfo.admin && <img src='/images/delete.png' onClick={()=> {openDeleteOverlay(book.file_id, book.filename)}}/>):<Navigate to="/login"/>}   
                         </div>
                     </div>
                 ))}

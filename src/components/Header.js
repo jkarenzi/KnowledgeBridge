@@ -4,6 +4,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthProvider';
+import { useContext } from 'react';
 
 const Header = (props) => {
     const links = props.links;
@@ -11,6 +13,7 @@ const Header = (props) => {
     const location = useLocation()
     const [openUserOptions, setOpenUserOptions ] = useState(false);
     const [newLinks, setNewLinks] = useState([])
+    const {dispatch} = useContext(AuthContext)
 
     const showToast = () => {
         toast.success('Successfully logged out', {
@@ -21,6 +24,7 @@ const Header = (props) => {
     function handleLogout() {
         localStorage.removeItem('token')
         localStorage.removeItem('userInfo')
+        dispatch({type:'LOGOUT'})
         navigate('/login')
         showToast()
     }

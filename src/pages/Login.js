@@ -1,15 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthProvider';
+import { useContext } from 'react';
 
 
 const Login = () => {
     const navigate = useNavigate()
     const [ loginLoader, setLoginLoader ] = useState(false)
+    const {dispatch} = useContext(AuthContext)
 
     const ThreeDotsLoader = () => (
         <div className="loader">
@@ -40,6 +43,7 @@ const Login = () => {
             if (data.status === 'ok'){
                 localStorage.setItem('token', data.token)
                 localStorage.setItem('userInfo', JSON.stringify(data.user_info))
+                dispatch({type:'LOGIN',token:data.token,userInfo:data.user_info})
                 navigate('/library')
                 showToast()
             } else {
@@ -104,6 +108,7 @@ const Login = () => {
             if (data.status === 'ok'){
                 localStorage.setItem('token', data.token)
                 localStorage.setItem('userInfo', JSON.stringify(data.user_info))
+                dispatch({type:'LOGIN',token:data.token,userInfo:data.user_info})
                 navigate('/library')
                 showToast()
             } else {
