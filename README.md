@@ -1,6 +1,8 @@
 #Start by cloning this repo.
 git clone https://github.com/jkarenzi/KnowledgeBridge.git
 
+#Set up REACT_APP_CLIENT_ID as the google client id from google(for google login)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
